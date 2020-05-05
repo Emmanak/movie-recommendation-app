@@ -30,3 +30,7 @@ Here’s what Movie Recommendation App’s web developers will do to assure Movi
 * Content/item based filtering using similarity measures to offer a system that can recommend relevant movie titles for a user. Machine learning.
 * CI/CD 
 * Styled with Bootstrap
+
+## Project Proposal
+
+[View Project Proposal](https://docs.google.com/document/d/1vMJVPhs2Pi8eLsvuRndS219OCU_rltcawJ483_s_Mx8/edit?usp=sharing "Movie Recommendation App Proposal")
