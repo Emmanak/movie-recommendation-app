@@ -13,8 +13,18 @@ export interface NavBarProps {
 export interface NavBarState {
 
 }
+
+
  
 class NavBar extends React.Component<NavBarProps, NavBarState> {
+
+    handleKeyPress(target:any) {
+        if(target.charCode === 13){
+          var button = document.getElementById("searchMoviesButton") as HTMLButtonElement;
+          button.click();
+        } 
+      }
+
     render() { 
         return ( 
             <React.Fragment>
@@ -27,8 +37,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                         <Nav.Link href="#link">Your Movies</Nav.Link>
                         </Nav>
                         <Form inline>
-                        <FormControl onChange={this.props.handleChange} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button variant="outline-success" onClick={this.props.search/* this.props.serach() allows for continous search*/}>Search Movies</Button>
+                        <FormControl onChange={this.props.handleChange} onKeyPress={this.handleKeyPress} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />
+                        <Button id="searchMoviesButton" variant="outline-success" onClick={this.props.search}>Search Movies</Button>
                         </Form>
                     </Navbar.Collapse>
                     </Navbar>

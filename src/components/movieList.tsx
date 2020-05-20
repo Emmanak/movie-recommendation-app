@@ -34,7 +34,7 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
             return ( 
                 <div>
                     <div id='movies' className="row pb-5">
-                        {this.props.movieList.map(movie => <div key={"movie-"+movie.id.toString()} className="col-md-4 col-sm-6 col-xs-12 pt-5"><MovieCard 
+                        {this.props.movieList.map(movie => <div key={"movie-"+movie.id.toString()} className="d-flex justify-content-around col-md-4 col-sm-6 col-xs-12 pt-5"><MovieCard 
                         key={movie.id}
                         movieName={movie.title} 
                         image={"https://image.tmdb.org/t/p/w500"+movie.poster_path}
