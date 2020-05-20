@@ -6,15 +6,15 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
 export interface NavBarProps {
+    handleChange: any
     search: any
 }
  
 export interface NavBarState {
-    
+
 }
  
 class NavBar extends React.Component<NavBarProps, NavBarState> {
-    state = {  }
     render() { 
         return ( 
             <React.Fragment>
@@ -26,9 +26,9 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                         <Nav.Link href="#trending">Trending Movies</Nav.Link>
                         <Nav.Link href="#link">Your Movies</Nav.Link>
                         </Nav>
-                        <Form>
-                        <input id="movieSearchBox" type="text" placeholder="Search" className="form-control" />
-                        <Button variant="outline-success" onClick={this.props.search}>Search Movies</Button>
+                        <Form inline>
+                        <FormControl onChange={this.props.handleChange} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />
+                        <Button variant="outline-success" onClick={this.props.search/* this.props.serach() allows for continous search*/}>Search Movies</Button>
                         </Form>
                     </Navbar.Collapse>
                     </Navbar>

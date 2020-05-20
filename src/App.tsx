@@ -9,14 +9,18 @@ export interface AppProps {
 }
  
 export interface AppState {
-  movieList: Array<any>
+  movieList: Array<any>,
+  searchQuery: string
   
 }
  
 class App extends React.Component<AppProps, AppState> {
-  state = { movieList: []  }
+  state = { 
+    movieList: [],
+    searchQuery: ''
+    }
   componentDidMount(){
-    this.getMovies();
+    this.getPopularMovies();
   }
   componentWillUnmount(){
 
@@ -25,7 +29,7 @@ class App extends React.Component<AppProps, AppState> {
     return ( 
       <React.Fragment>
       <div id='navbar'>
-          <NavBar search={this.search}/>
+          <NavBar handleChange={this.readInput} search={this.searchMovies}/>
       </div>
       <div id='movieList' className="container">
         <MovieList movieList={this.state.movieList}/>
@@ -34,7 +38,7 @@ class App extends React.Component<AppProps, AppState> {
      );
   }
 
-  getMovies = () =>{
+  getPopularMovies = () =>{
     
     fetch('https://api.themoviedb.org/3/movie/popular?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=1')
     .then(response => response.json())
@@ -48,9 +52,24 @@ class App extends React.Component<AppProps, AppState> {
     })
   } 
 
-  search = () => {
-    var search = document.getElementById("movieSearchBox")?.textContent;
-    console.log(search);
+  searchMovies = () => {
+    var searchQuery = this.state.searchQuery.replace(/ /g,"+");
+    console.log(searchQuery);
+    fetch('https://api.themoviedb.org/3/search/movie?api_key=04c67358ca6817bcec69c61716577d76&query='+searchQuery)
+    .then(response => response.json())
+    .then(jsonData => {
+      // jsonData is parsed json object received from url
+      this.setState({movieList: jsonData.results});
+    })
+    .catch((error) => {
+      // handle your errors here
+      console.error(error)
+    })
+
+  }
+
+  readInput = (event:any) => {
+    this.setState({searchQuery: event.target.value});
   }
 
 
