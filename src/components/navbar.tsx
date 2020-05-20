@@ -5,9 +5,19 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
-function NavBar(){
-    return(
-        <React.Fragment>
+export interface NavBarProps {
+    search: any
+}
+ 
+export interface NavBarState {
+    
+}
+ 
+class NavBar extends React.Component<NavBarProps, NavBarState> {
+    state = {  }
+    render() { 
+        return ( 
+            <React.Fragment>
                 <Navbar bg="light" expand="lg">
                     <Navbar.Brand href="#home">Movie Picker</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -16,14 +26,15 @@ function NavBar(){
                         <Nav.Link href="#trending">Trending Movies</Nav.Link>
                         <Nav.Link href="#link">Your Movies</Nav.Link>
                         </Nav>
-                        <Form inline>
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button variant="outline-success">Search Movies</Button>
+                        <Form>
+                        <input id="movieSearchBox" type="text" placeholder="Search" className="form-control" />
+                        <Button variant="outline-success" onClick={this.props.search}>Search Movies</Button>
                         </Form>
                     </Navbar.Collapse>
                     </Navbar>
             </React.Fragment>
-    )
+         );
+    }
 }
-
+ 
 export default NavBar;

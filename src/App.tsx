@@ -3,7 +3,6 @@ import './App.css';
 import MovieList from './components/movieList';
 import NavBar from "./components/navbar";
 
-var queryList:Array<any>;
 
 export interface AppProps {
   
@@ -23,11 +22,10 @@ class App extends React.Component<AppProps, AppState> {
 
   }
   render() {
-    console.log(this.state.movieList);
     return ( 
       <React.Fragment>
       <div id='navbar'>
-          <NavBar/>
+          <NavBar search={this.search}/>
       </div>
       <div id='movieList' className="container">
         <MovieList movieList={this.state.movieList}/>
@@ -43,14 +41,19 @@ class App extends React.Component<AppProps, AppState> {
     .then(jsonData => {
       // jsonData is parsed json object received from url
       this.setState({movieList: jsonData.results});
-      queryList = jsonData.results;
-      console.log(queryList);
     })
     .catch((error) => {
       // handle your errors here
       console.error(error)
     })
   } 
+
+  search = () => {
+    var search = document.getElementById("movieSearchBox")?.textContent;
+    console.log(search);
+  }
+
+
 }
  
 export default App;
