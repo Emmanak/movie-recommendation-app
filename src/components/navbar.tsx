@@ -34,7 +34,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
                         <Nav.Link href="#trending">Trending Movies</Nav.Link>
-                        <Nav.Link href="#link">Your Movies</Nav.Link>
+                        <Nav.Link href="#your-movies">Your Movies</Nav.Link>
                         </Nav>
                         <Form inline>
                         <FormControl onChange={this.props.handleChange} onKeyPress={this.handleKeyPress} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />

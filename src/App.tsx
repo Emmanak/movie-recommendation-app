@@ -2,6 +2,10 @@ import React from 'react';
 import './App.css';
 import MovieList from './components/movieList';
 import NavBar from "./components/navbar";
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+
+
+
 
 
 export interface AppProps {
@@ -26,14 +30,38 @@ class App extends React.Component<AppProps, AppState> {
 
   }
   render() {
+    /*const routes = [
+      {
+        path: '/#home',
+        component: MovieList,
+        props: this.state.movieList
+    
+      },
+      {
+        path: '/#trending',
+        component: MovieList,
+        props: this.state.movieList
+    
+      }
+    ];*/
+
+    const passMovieList = () => {
+      return(
+        <MovieList movieList={this.state.movieList}/>
+      );
+    }
     return ( 
       <React.Fragment>
       <div id='navbar'>
           <NavBar handleChange={this.readInput} search={this.searchMovies}/>
       </div>
-      <div id='movieList' className="container">
-        <MovieList movieList={this.state.movieList}/>
-      </div>
+      <Router>
+        <Switch>
+          <Route path="/#trending" exact component={passMovieList}></Route>
+        </Switch>
+      </Router>
+      <MovieList movieList={this.state.movieList}/>
+      
     </React.Fragment>
      );
   }
