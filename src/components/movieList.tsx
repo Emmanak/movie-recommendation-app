@@ -25,15 +25,12 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
     }
     componentDidMount(){
         this.setState({ update: true});
-        console.log(this.props.movieList);
-        while(this.props.movieList.length === 1){
-            console.log("waiting");
-        }
     }
     componentWillUnmount(){
         
     }
     render() {
+        console.log(this.props.movieList)
         if(this.state.update === true){
             return ( 
                 <div id='movieList' className="container">
