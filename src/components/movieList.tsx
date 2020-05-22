@@ -30,9 +30,10 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
         
     }
     render() {
+        console.log(this.props.movieList)
         if(this.state.update === true){
             return ( 
-                <div>
+                <div id='movieList' className="container">
                     <div id='movies' className="row pb-5">
                         {this.props.movieList.map(movie => <div key={"movie-"+movie.id.toString()} className="d-flex justify-content-around col-md-4 col-sm-6 col-xs-12 pt-5"><MovieCard 
                         key={movie.id}

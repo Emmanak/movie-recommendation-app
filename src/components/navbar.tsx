@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 export interface NavBarProps {
     handleChange: any
-    search: any
+    search?: any
 }
  
 export interface NavBarState {
@@ -29,16 +29,16 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         return ( 
             <React.Fragment>
                 <Navbar bg="light" expand="lg">
-                    <Navbar.Brand href="#home">Movie Picker</Navbar.Brand>
+                    <Navbar.Brand href="home">Movie Picker</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                        <Nav.Link href="#trending">Trending Movies</Nav.Link>
-                        <Nav.Link href="#link">Your Movies</Nav.Link>
+                        <Nav.Link href="trending">Trending Movies</Nav.Link>
+                        <Nav.Link href="your-movies">Your Movies</Nav.Link>
                         </Nav>
                         <Form inline>
                         <FormControl onChange={this.props.handleChange} onKeyPress={this.handleKeyPress} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button id="searchMoviesButton" variant="outline-success" onClick={this.props.search}>Search Movies</Button>
+                        <Button id="searchMoviesButton" variant="outline-success">Search Movies</Button>
                         </Form>
                     </Navbar.Collapse>
                     </Navbar>
