@@ -81,9 +81,15 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   getPopularMovies = () =>{
+    const query = {
+      popular: 'https://api.themoviedb.org/3/movie/popular?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=',
+      trending: 'https://api.themoviedb.org/3/trending/all/day?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=',
+      multi: 'https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page=1&query=family'
+    }
+    var page : string = Math.round(Math.random() * 10).toString();
     if(this.state.searchQuery === ''){
       //get current popular movies from the database
-      fetch('https://api.themoviedb.org/3/movie/popular?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=1')
+      fetch(query.trending + page)
       .then(response => response.json())
       .then(jsonData => {
         // jsonData is parsed json object received from url
@@ -106,7 +112,7 @@ class App extends React.Component<AppProps, AppState> {
     }
     //search database for movies based on user input
     var searchQuery = event.target.value.replace(/ /g,"+");
-    fetch('https://api.themoviedb.org/3/search/movie?api_key=04c67358ca6817bcec69c61716577d76&query='+searchQuery)
+    fetch('https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page=1&query='+searchQuery)
     .then(response => response.json())
     .then(jsonData => {
       // jsonData is parsed json object received from url
