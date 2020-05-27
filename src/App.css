@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+
+.addMovie {
+  position:relative;
+}
+
+.addMovieButton{
+  z-index: 1;
+  position:absolute;top:1rem;left:10rem;
+  background-color: Transparent;
+  /*background-image: url(./images/addMovie.png);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;*/
+  /* put the height and width of your image here */
+  height: 64px;
+  width: 64px;
+  border: none;
+  opacity: 0;
+  
+}
+
+.addMovieButton:hover {
+  opacity: 1;
+  /*background-image: url(./images/addMovie-hover.png);*/
+}
+
+.addMovieButton:active {
+  opacity: 1;
+  /*background-image: url(./images/addMovie-active.png);*/
+}

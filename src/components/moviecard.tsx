@@ -1,11 +1,16 @@
 import * as React from 'react';
 import Card from 'react-bootstrap/Card';
 import no_picture_available from '../images/no_photo_available.png';
+//import movie_added from '../images/addMovie-active.png';
 
 function MovieCard(props: any){
     return ( 
         <Card style={{ width: '15rem' }}>
-        <Card.Img variant="top" src={movieImage(props)}/>
+            <div className="addMovie">
+                <input type="checkbox" onClick={() => addToYourMovies(props)}  id={props.id} className="addMovieButton"></input>
+                <Card.Img variant="top" src={movieImage(props)}/>
+            </div>
+        
         <Card.Body>
             <Card.Title>{props.movieName}</Card.Title>
             <Card.Text>
@@ -36,6 +41,12 @@ const movieImage = (props:any) =>{
     else{
         return props.image;
     }
+}
+
+const addToYourMovies = (props:any) => {
+    const id = props.id.replace('card-','');
+    //use this ID to add movies to a users personal list.
+    console.log("Movie "+id+" added to Your Movies!");
 }
  
 export default MovieCard;
