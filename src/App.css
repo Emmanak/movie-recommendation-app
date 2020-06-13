@@ -65,3 +65,25 @@
   opacity: 1;
   /*background-image: url(./images/addMovie-active.png);*/
 }
+
+/*Movie Card Animation */
+.card-appear {
+  opacity: 0;
+  transform: translate(0%,200%);
+}
+
+.card-enter{
+  opacity: 0;
+  transform: translate(0%,200%);
+}
+
+.card-appear.card-appear-active{
+  opacity: 1;
+  transform: translate(0px, 0px);
+  transition: opacity 1500ms linear, transform 1500ms;
+}
+.card-enter.card-enter-active{
+  opacity: 1;
+  transform: translate(0px, 0px);
+  transition: opacity 1500ms linear, transform 1500ms;
+}
