@@ -3,6 +3,8 @@ import Card from 'react-bootstrap/Card';
 import no_picture_available from '../images/no_photo_available.png';
 //import movie_added from '../images/addMovie-active.png';
 
+var movieID = 0;
+
 function MovieCard(props: any){
     return ( 
         <Card style={{ width: '15rem' }}>
@@ -47,6 +49,9 @@ const addToYourMovies = (props:any) => {
     const id = props.id.replace('card-','');
     //use this ID to add movies to a users personal list.
     console.log("Movie "+id+" added to Your Movies!");
+    movieID = id;
 }
  
 export default MovieCard;
+
+export {movieID};
