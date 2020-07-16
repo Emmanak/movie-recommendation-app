@@ -1,6 +1,6 @@
 var movieRatings = [];
 
-movieRatings[1726] = 3;
+/*movieRatings[1726] = 3;
 movieRatings[14160] = 5;
 movieRatings[637] = 5;
 movieRatings[10555] = 4;
@@ -16,13 +16,100 @@ movieRatings[568160] = 5;
 movieRatings[129] = 4;
 movieRatings[4935] = 5;
 movieRatings[8193] = 5;
+movieRatings[22538] = 5;
+movieRatings[9353] = 4;
 movieRatings[19995] = 4;
+movieRatings[176] = 0;
+movieRatings[49018] = 1;
+movieRatings[9360] = 0;
+movieRatings[114150] = 4;*/
 
-console.log(movieRatings);
+movieRatings[1726] = 1;
+movieRatings[14160] = 1;
+movieRatings[637] = 1;
+movieRatings[10555] = 1;
+movieRatings[105] = 1;
+movieRatings[20453] = 1;
+movieRatings[155] = 1;
+movieRatings[550] = 1;
+movieRatings[2493] = 1;
+movieRatings[157336] = 1;
+movieRatings[137113] = 1;
+movieRatings[118340] = 1;
+movieRatings[568160] = 1;
+movieRatings[129] = 1;
+movieRatings[4935] = 1;
+movieRatings[8193] = 1;
+movieRatings[22538] = 1;
+movieRatings[9353] = 1;
+movieRatings[19995] = 1;
+movieRatings[176] = 0;
+movieRatings[49018] = 0;
+movieRatings[9360] = 0;
+movieRatings[114150] = 1;
+movieRatings[81356] = 0;
+movieRatings[216015]=0;
+
+//console.log(movieRatings);
+
+/*var yourmovies = [
+    {id: 1726,type: 'movie', rating:3},
+    {id: 14160,type: 'movie', rating:5},
+    {id: 637,type: 'movie', rating:5},
+    {id: 10555,type: 'movie', rating:4},
+    {id: 105,type: 'movie', rating:4},
+    {id: 20453,type: 'movie', rating:5},
+    {id: 155,type: 'movie', rating:5},
+    {id: 550,type: 'movie', rating:5},
+    {id: 2493,type: 'movie', rating:5},
+    {id: 157336,type: 'movie', rating:5},
+    {id: 137113,type: 'movie', rating:5},
+    {id: 118340,type: 'movie', rating:4},
+    {id: 568160,type: 'movie', rating:5},
+    {id: 129,type: 'movie', rating:4},
+    {id: 4935,type: 'movie', rating:5},
+    {id: 8193,type: 'movie', rating:5},
+    {id: 22538,type: 'movie', rating:5},
+    {id: 9353,type: 'movie', rating:4},
+    {id: 19995,type: 'movie', rating:4},
+    {id: 176, type: 'movie', rating:0},
+    {id: 49018,type: 'movie', rating:1},
+    {id: 9360, type: 'movie', rating:0},
+    {id: 114150,type: 'movie', rating:4}
+];*/
+
+var yourmovies = [
+    {id: 1726,type: 'movie', rating:1},
+    {id: 14160,type: 'movie', rating:1},
+    {id: 637,type: 'movie', rating:1},
+    {id: 10555,type: 'movie', rating:1},
+    {id: 105,type: 'movie', rating:1},
+    {id: 20453,type: 'movie', rating:1},
+    {id: 155,type: 'movie', rating:1},
+    {id: 550,type: 'movie', rating:1},
+    {id: 2493,type: 'movie', rating:1},
+    {id: 157336,type: 'movie', rating:1},
+    {id: 137113,type: 'movie', rating:1},
+    {id: 118340,type: 'movie', rating:1},
+    {id: 568160,type: 'movie', rating:1},
+    {id: 129,type: 'movie', rating:1},
+    {id: 4935,type: 'movie', rating:1},
+    {id: 8193,type: 'movie', rating:1},
+    {id: 22538,type: 'movie', rating:1},
+    {id: 9353,type: 'movie', rating:1},
+    {id: 19995,type: 'movie', rating:1},
+    {id: 176, type: 'movie', rating:0},
+    {id: 49018,type: 'movie', rating:0},
+    {id: 9360, type: 'movie', rating:0},
+    {id: 114150,type: 'movie', rating:1},
+    {id: 81356,type: 'movie', rating:0},
+    {id: 216015,type: 'movie', rating:0}
+];
 
 
 
-var movies = [
+
+var localmovies = [
     {
         "adult": false,
         "backdrop_path": "/vbY95t58MDArtyUXUIb8Fx1dCry.jpg",
@@ -1389,7 +1476,10 @@ var movies = [
         "video": false,
         "vote_average": 7.4,
         "vote_count": 21528
-    }];
+    },
+    {"adult":false,"backdrop_path":"/qtWjZgCmslPwjP4DFUcLBUj13GV.jpg","belongs_to_collection":{"id":656,"name":"Saw Collection","poster_path":"/xmC2A7qPEfiOkQC58fZh8srWQ5v.jpg","backdrop_path":"/oLfS1lOmN2KIU2IQ200SDEPVEZe.jpg"},"budget":1200000,"genres":[{"id":27,"name":"Horror"},{"id":9648,"name":"Mystery"},{"id":80,"name":"Crime"}],"homepage":"","id":176,"imdb_id":"tt0387564","original_language":"en","original_title":"Saw","overview":"Obsessed with teaching his victims the value of life, a deranged, sadistic serial killer abducts the morally wayward. Once captured, they must face impossible choices in a horrific game of survival. The victims must fight to win their lives back, or die trying...","popularity":25.326,"poster_path":"/pparEGTCxcTiImyVFoKD0LX11N8.jpg","production_companies":[{"id":2061,"logo_path":"/o9LbN33hRaj4qcebUv1bikyXeoB.png","name":"Twisted Pictures","origin_country":"US"},{"id":23019,"logo_path":null,"name":"Evolution Entertainment","origin_country":""},{"id":55405,"logo_path":null,"name":"Saw Productions Inc.","origin_country":""},{"id":1632,"logo_path":"/cisLn1YAUuptXVBa0xjq7ST9cH0.png","name":"Lionsgate","origin_country":"US"}],"production_countries":[{"iso_3166_1":"US","name":"United States of America"}],"release_date":"2004-10-01","revenue":103911669,"runtime":103,"spoken_languages":[{"iso_639_1":"en","name":"English"}],"status":"Released","tagline":"Live or die. Make your choice.","title":"Saw","video":false,"vote_average":7.4,"vote_count":5827},
+    {"adult":false,"backdrop_path":"/yZP6GyrgzdpjH1AxPHlb8ACLkiA.jpg","belongs_to_collection":{"id":228446,"name":"Insidious Collection","poster_path":"/w1213HKk1XKSwHiBgjkWghn9biC.jpg","backdrop_path":"/5FrPZHgbbmTIq0oxpwSGqu5HyXC.jpg"},"budget":1500000,"genres":[{"id":27,"name":"Horror"},{"id":53,"name":"Thriller"}],"homepage":"http://www.insidious-movie.com/","id":49018,"imdb_id":"tt1591095","original_language":"en","original_title":"Insidious","overview":"A family discovers that dark spirits have invaded their home after their son inexplicably falls into an endless sleep. When they reach out to a professional for help, they learn things are a lot more personal than they thought.","popularity":20.818,"poster_path":"/tmlDFIUpGRKiuWm9Ixc6CYDk4y0.jpg","production_companies":[{"id":11341,"logo_path":"/xytTBODEy3p20ksHL4Ftxr483Iv.png","name":"Stage 6 Films","origin_country":"US"},{"id":2514,"logo_path":null,"name":"Alliance Films","origin_country":"CA"},{"id":7437,"logo_path":"/e5CcgFrdlxMUwlsS72si8q1yHBr.png","name":"IM Global","origin_country":"US"},{"id":21742,"logo_path":null,"name":"Haunted Movies","origin_country":""},{"id":34,"logo_path":"/GagSvqWlyPdkFHMfQ3pNq6ix9P.png","name":"Sony Pictures","origin_country":"US"},{"id":3172,"logo_path":"/kDedjRZwO8uyFhuHamomOhN6fzG.png","name":"Blumhouse Productions","origin_country":"US"}],"production_countries":[{"iso_3166_1":"CA","name":"Canada"},{"iso_3166_1":"US","name":"United States of America"}],"release_date":"2010-09-13","revenue":97009150,"runtime":103,"spoken_languages":[{"iso_639_1":"en","name":"English"}],"status":"Released","tagline":"It's not the house that's haunted.","title":"Insidious","video":false,"vote_average":6.9,"vote_count":4382}
+];
 
     var genres = [
             {
@@ -1597,4 +1687,4 @@ var movies = [
 
 
 
-        export {movies, genres, movieRatings, testCase, formattedMovies};
+        export {localmovies, yourmovies, movieRatings, testCase, formattedMovies};

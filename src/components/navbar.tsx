@@ -4,8 +4,11 @@ import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import {movieID} from './moviecard';
-import {rateMovie} from './recommendation';
+//import {movieID} from './moviecard';
+//import {rateMovie} from './recommendation';
+
+var test:any;
+test = "hey";
 
 export interface NavBarProps {
     handleChange: any
@@ -37,7 +40,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                         <Nav className="mr-auto">
                         <Nav.Link href="trending">Trending Movies</Nav.Link>
                         <Nav.Link href="your-movies">Your Movies</Nav.Link>
-                        <button onClick={() => {rateMovie(movieID)}}>Machine Learning</button>
+                        {/*<button onClick={() => {rateMovie(movieID)}}>Rate Movies</button>*/}
                         </Nav>
                         <Form inline>
                         <FormControl onChange={this.props.handleChange} onKeyPress={this.handleKeyPress} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />
@@ -51,3 +54,5 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 }
  
 export default NavBar;
+
+export {test};

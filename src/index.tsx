@@ -4,12 +4,16 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import {MovieProvider} from './movieContext';
+
 
 
 
 ReactDOM.render(
   <React.StrictMode>
+    <MovieProvider>
     <App />
+    </MovieProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

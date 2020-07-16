@@ -1,6 +1,8 @@
 //import brain from 'brain.js';
-import {movieID} from './moviecard';
-import {movies, genres, movieRatings, testCase, formattedMovies} from './movie-genre-variables';
+/*import {movieID} from './moviecard';
+import {db} from '../fbconfig';
+import {localmovies, yourmovies, movieRatings, testCase} from './movie-genre-variables';
+import {test} from './navbar';
 const brain = require('brain.js');
 const network = new brain.NeuralNetwork();
 
@@ -33,6 +35,13 @@ function CreateInput() {
     this.id10752=0;
     this.id10768=0;
     this.id37=0;
+    //this.budget=0;
+    this.popularity=0;
+    //this.revenue=0;
+    this.vote_average=0;
+    this.vote_count=0;
+
+
 }
 
 function CreateOutput() {
@@ -40,142 +49,54 @@ function CreateOutput() {
     this.dislike = 0;
 }
 
+
+var trainingData;
+
+
+
 function createTrainingData(movies){
-    //*** INITIALIZING EMPTY INPUT OBJECT ***//
-    //training data object initialization
-    //var input_object = {input: new CreateInput, output: new CreateOutput};
 
     var moviesLength = movies.length;
     console.log(moviesLength);
+    console.log(movieRatings[movies[0].id]);
 
-    //All (27) movie genres added to training data object. 
-    //for(var i = 0; i < genres.length; i++){
-      //  input_object.input["id"+genres[i].id] = 0;
-    //}
-    //adding 28 - budget 29 - popularity 30 - revenue 
-    //31 - vote_average 21 - vote_count
-    /*input_object.input["budget"] = 0;
-    input_object.input["popularity"] = 0;
-    input_object.input["revenue"] = 0;
-    input_object.input["vote_average"] = 0;
-    input_object.input["vote_count"] = 0;*/
-
-    //console.log(input_object);
-    
-
+   console.log("Test get Your Movies:");
+   
     //Creating Training Data using a Users Movies list and
     // a list of all available genres
-    var trainingData = null;
-    trainingData = [];
+    var trainingData = [];
     console.log(trainingData);
     for(var i = 0; i < moviesLength; i++){
         var genreLength = movies[i].genres.length;
-        trainingData[i] = {input: new CreateInput(), output: new CreateOutput()}//JSON.parse(JSON.stringify(input_object));
+        trainingData.push({input: new CreateInput(), output: new CreateOutput()});
+        var index = trainingData.length-1;
+        console.log(index);
+        //trainingData[i] = {input: new CreateInput(), output: new CreateOutput()}//JSON.parse(JSON.stringify(input_object));
         for(var j = 0; j < genreLength; j++){
-            trainingData[i].input["id"+genres[j].id] = 1;
+            console.log(movies[i].genres[j].id);
+            trainingData[index].input["id"+movies[i].genres[j].id] = 1;
         }
-        /*trainingData[i].input["budget"] = 1/movies[i].budget;
-        trainingData[i].input["popularity"] = 1/movies[i].popularity;
-        trainingData[i].input["revenue"] = 1/movies[i].revenue;
-        trainingData[i].input["vote_average"] = 1/movies[i].vote_average;
-        trainingData[i].input["vote_count"] = 1/movies[i].vote_count;*/
-        trainingData[i].output.like = movieRatings[movies[i].id]/5;
-        trainingData[i].output.dislike = 1-(movieRatings[movies[i].id]/5);
+        //trainingData[index].input.budget = Math.log10(movies[i].budget)/(1 + (Math.log10(movies[i].budget)));
+        trainingData[index].input.popularity = Math.log10(movies[i].popularity)/(1 + (Math.log10(movies[i].popularity)));
+        //trainingData[index].input.revenue = Math.log10(movies[i].revenue)/(1 + (Math.log10(movies[i].revenue)));
+        trainingData[index].input.vote_average = movies[i].vote_average/10;
+        trainingData[index].input.vote_count = Math.log10(movies[i].vote_count)/(1 + (Math.log10(movies[i].vote_count)));
+        //trainingData[index].output.like = (movieRatings[movies[i].id])/5;
+        //trainingData[index].output.dislike = 1-((movieRatings[movies[i].id])/5);
+        trainingData[index].output.like = 1*(movies[i].aiRating);
+        trainingData[index].output.dislike = 1-((movies[i].aiRating));
+
+        console.log(trainingData[index]);
         
     }
     console.log(trainingData);
     return(trainingData);
 }
 
-function createTestingData(movie){
-    //*** INITIALIZING EMPTY INPUT OBJECT ***//
-    //training data object initialization
-    var testing_object = {input: {}};
-
-    var movieLength = movie.length;
-    console.log(movieLength);
-
-    //All (27) movie genres added to training data object. 
-    for(var i = 0; i < genres.length; i++){
-        testing_object.input["id"+genres[i].id] = 0;
-        console.log(testing_object);
-    }
-    //adding 28 - budget 29 - popularity 30 - revenue 
-    //31 - vote_average 21 - vote_count
-    /*testing_object.input["budget"] = 0;
-    testing_object.input["popularity"] = 0;
-    testing_object.input["revenue"] = 0;
-    testing_object.input["vote_average"] = 0;
-    testing_object.input["vote_count"] = 0;*/
-
-    console.log(testing_object);
-
-    for(var i = 0; i <= movieLength; i++){
-        var genreLength = movie[i].genres.length;
-        for(var j = 0; j < genreLength; j++){
-            testing_object.input["id"+genres[j].id] = 1;
-        }
-
-    
-    
-
-    //Creating Training Data using a Users movie list and
-    // a list of all available genres
-    //var testingData = {}
 
 
-    /*console.log(testingData);
-    for(var i = 0; i < movieLength; i++){
-        var genreLength = movie[i].genres.length;
-        console.log(JSON.parse(JSON.stringify(testing_object)));
-        testingData["del"+i] = JSON.parse(JSON.stringify(testing_object));
-        console.log(testingData["del"+i]);
-        for(var j = 0; j < genreLength; j++){
-            testingData["del"+i].input["id"+genres[j].id] = 1;
-        }*/
-        /*testingData["del"+i].input["budget"] = 1/movie[i].budget;
-        testingData["del"+i].input["popularity"] = 1/movie[i].popularity;
-        testingData["del"+i].input["revenue"] = 1/movie[i].revenue;
-        testingData["del"+i].input["vote_average"] = 1/movie[i].vote_average;
-        testingData["del"+i].input["vote_count"] = 1/movie[i].vote_count;*/
-        
-    }
-
-    console.log(JSON.stringify(testing_object));
-    return(testing_object);
-}
-
-console.log("hey");
-/*var trainingData = createTrainingData(movies);//JSON.stringify(createTrainingData(movies));//.replace(/\"(del)(.*?)\:/g, '');
-for(var movie = 0; movie < trainingData.length; movie ++){
-    trainingData[movie] = JSON.stringify(trainingData[movie]);
-    trainingData[movie] = JSON.parse(trainingData[movie].replace(/"/g, ''));
-}*/
-
-//trainingData = JSON.parse(trainingData.replace(/"/g, ''));
-//trainingData = trainingData.replace(/^\{/g, '[');
-//trainingData = trainingData.replace(/\}$/g, ']');
-var trainingData = createTrainingData(movies);
-console.log(trainingData[0]);
-
-
-const data = [
-    {input : [0,0], output: [0]},
-    {input : [0,1], output: [1]},
-    {input : [1,0], output: [1]},
-    {input : [1,1], output: [0]}
-];
-
-console.log(data);
-
-console.log("Begin training...");
-//network.train(eval(trainingData));
-network.train(trainingData);
-console.log("Training completed!");
-
-
-var result = 0;
-
+// Uses the AI to rate a movie.
+//Takes an input of a movieID
 function rateMovie(movieID){
     if(movieID === 0){
         console.log(movieID);
@@ -185,18 +106,15 @@ function rateMovie(movieID){
       .then(response => response.json())
       .then(jsonData => {
         // jsonData is parsed json object received from url
+
         
         console.log(movieID);
-        /*let testMovie = [jsonData];
+        let testMovie = [jsonData];
         console.log(testMovie);
-        var movieJson = createTestingData(testMovie)
+        var movieJson = createTrainingData(testMovie);
         console.log(movieJson);
-        movieJson = JSON.stringify(movieJson.input);
-        movieJson = movieJson.replace(/"/g, '');
-        console.log(movieJson);
-        testMovie = movieJson;*/
-        let result =  network.run({id28:1,id10759:0,id12:0,id16:1,id35:0,id80:1,id99:0,id18:0,id10751:0,id14:0,id36:0,id27:0,id10762:0,id10402:0,id9648:0,id10763:0,id10764:0,id10749:0,id878:1,id10765:0,id10766:0,id10767:0,id10770:0,id53:0,id10752:0,id10768:0,id37:0});
-        console.log(result);
+        let result = network.run(movieJson[0].input);
+        alert(result.like+"   "+result.dislike);
         
       })
       .catch((error) => {
@@ -206,30 +124,89 @@ function rateMovie(movieID){
 
 }
 
+
+function calculateRecomendation(movies){
+    console.log(movies);
+
+    if(movies === undefined ){
+        console.log("no movies");
+        return;
+    }
+    
+    var promises = [];
+    for(var i = 0; i < movies.length; i++){
+        promises.push(fetch("https://api.themoviedb.org/3/movie/"+movies[i].id+"?api_key=04c67358ca6817bcec69c61716577d76&language=en-US").then(response => response.json())
+        .then(jsonData => {
+            //Add like or dislike rating before returning JSON
+            var movie = movies.filter(movie => movie.id == jsonData.id)
+            jsonData.aiRating = movie[0].rating;
+            return jsonData;
+        }));
+    }
+
+    Promise.all(promises).then(movies => {
+
+        console.log(movies);
+        //addToFirebase(yourmovies);
+        console.log("logging your movies");
+        console.log(test);
+        trainingData = createTrainingData(movies);
+        console.log("hey"+trainingData[0]);
+        console.log("Begin training...");
+        network.train(trainingData);
+        console.log("Training completed!");
+        
+
+    })
+    .catch((error) => {
+        // handle your errors here
+        console.error(error)
+      })
+}
+
+//Takes an Array of Objects [{},{},...] as an input
+//Writes user movies into Firebase
+function addToFirebase(movies){
+    var movieObjects = Object.assign({}, movies);
+    // Add a new document in collection "cities"
+    db.collection("emmanuel-augustine").doc("movie-recommendation-app").set(movieObjects)
+    .then(function() {
+        console.log("Movies successfully written to Firebase!");
+    })
+    .catch(function(error) {
+        console.error("Error writing document to Firebase: ", error);
+    });
+}
+
+//Takes an empty variable as input and returns and Array
+//Reads user movies from Firebase
+function readFromFirebase(movies){
+    // Add a new document in collection "cities"
+    db.collection("emmanuel-augustine").doc("movie-recommendation-app").get()
+    .then(function(movies) {
+        if(movies.exists){
+            movies = Object.assign([], movies.data());
+            console.log(movies);
+            console.log("Movies successfully read to Firebase!");
+            calculateRecomendation(movies);
+        }else{
+            console.log("No data found");
+        }
+        
+    })
+    .catch(function(error) {
+        console.error("Error writing document to Firebase: ", error);
+    });
+}
+
+var movies = [];
+readFromFirebase(movies);
 rateMovie(movieID);
-
-
-
-
 console.log(testCase);
 
-//console.log("Result is:"+result);
 
-/*var brain = require('brain.js')
-var net = new brain.recurrent.LSTM();
-net.train([
-  {input: "my unit-tests failed.", output: "software"},
-  {input: "tried the program, but it was buggy.", output: "software"},
-  {input: "i need a new power supply.", output: "hardware"},
-  {input: "the drive has a 2TB capacity.", output: "hardware"},
-  {input: "unit-tests", output: "software"},
-  {input: "program", output: "software"},
-  {input: "power supply", output: "hardware"},
-  {input: "drive", output: "hardware"},
-]);
-var result = net.run("drive")
-console.log("output = "+result);*/
 
 
 export {rateMovie};
-
+export{movies};
+*/

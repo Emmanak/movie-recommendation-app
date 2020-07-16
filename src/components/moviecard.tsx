@@ -9,7 +9,7 @@ function MovieCard(props: any){
     return ( 
         <Card style={{ width: '15rem' }}>
             <div className="addMovie">
-                <input type="checkbox" onClick={() => addToYourMovies(props)}  id={props.id} className="addMovieButton"></input>
+                <button onClick={(e) => addToYourMovies(props,e)}  id={props.id} className="addMovieButton"/>
                 <Card.Img variant="top" src={movieImage(props)}/>
             </div>
         
@@ -45,10 +45,13 @@ const movieImage = (props:any) =>{
     }
 }
 
-const addToYourMovies = (props:any) => {
+const addToYourMovies = (props:any,e:any) => {
     const id = props.id.replace('card-','');
     //use this ID to add movies to a users personal list.
-    console.log("Movie "+id+" added to Your Movies!");
+    console.log("Movie "+id+" added to Your Movies!", e.target.id);
+    let element = document.getElementById(e.target.id) as HTMLElement; 
+    element.className += "-pressed";
+
     movieID = id;
 }
  
