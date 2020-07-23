@@ -5,6 +5,21 @@ import NavBar from "./components/navbar";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import YourMovies from './components/yourmovies';
 import {db} from './fbconfig';
+import {MovieContext} from './movieContext';
+//import {TransitionGroup, CSSTransition} from 'react-transition-group';
+import {calculateRecomendation} from './components/recommendation';
+
+var init_flag:Boolean = false;
+
+var tempState:any = {
+  movieList : [],
+  searchQuery : '',
+  userData: [],
+  userMovies: [],
+  searchList : [],
+  typingTimeout: 0
+}
+
 
 
 
@@ -17,31 +32,52 @@ export interface AppState {
   searchQuery: string,
   searchList: Array<any>,
   userData: Array<any>,
-  userMovies: Array<any>
+  userMovies: Array<any>,
+  modifyData: Function
   
 }
+
+
  
-class App extends React.Component<AppProps, AppState> {
+class App extends React.PureComponent<AppProps, AppState> {
 
   state = { 
     movieList: [],
     searchQuery: '',
     searchList: [],
     userData: [],
-    userMovies: []
+    userMovies: [],
+    modifyData: (movies:Array<any>) => {
+      console.log("Set 1");
+      this.setState({userData: movies});
+      tempState.userData = movies;
+      this.addToFirebase(movies);
+      //this.readFromFirebase();
+      console.log(movies);
+    }
     }
 
+    
+    //const test:any;
 
-  componentDidMount(){
-    this.getPopularMovies();
-    this.readFromFirebase();
-  }
-  componentWillUnmount(){
+    componentWillMount(){
+      if(init_flag === false){
+        this.readFromFirebase();
+        this.getPopularMovies();
+        init_flag = true;
+      }
+      
+    }
 
-  }
-
+    
+  //   componentDidMount(){
+  //     console.log("Calculate Recommendation");
+  //     calculateRecomendation(this.state.userData);
+  // }
+  
 
   render() {
+    
 
     //Used to send props with MovieList Component in react-router
     const passMovieList = () => {
@@ -56,7 +92,9 @@ class App extends React.Component<AppProps, AppState> {
         return(
           <YourMovies 
           userData={this.state.userData}
-          userMovies={this.state.userMovies}></YourMovies>
+          userMovies={this.state.userMovies}
+          modifyData={this.state.modifyData}>
+          </YourMovies>
         );
       }
       else{
@@ -67,26 +105,39 @@ class App extends React.Component<AppProps, AppState> {
       
     }
 
-    
+    let that = this.state;
 
-    return ( 
-      <React.Fragment>
+    if(that.movieList !== [] && that.searchList !== [] && that.userData !== [] && that.userMovies !== []){
+      console.log("")
+      return(
+        <React.Fragment>
+          <MovieContext.Provider value={this.state}>
+          
+        <div id='navbar'>
+            <NavBar handleChange={this.readInput}/>
+        </div>
         
-      <div id='navbar'>
-          <NavBar handleChange={this.readInput}/>
-      </div>
-      <Router>
-        <Switch>
-          <Route path="/" exact component={passMovieList}></Route>
-          <Route path="/home" exact component={passMovieList}></Route>
-          <Route path="/trending" exact component={passMovieList}></Route>
-          <Route path="/your-movies" exact component={passYourMovies}></Route>
-        </Switch>
-      </Router>
-      
-      
-    </React.Fragment>
-     );
+        <Router>
+          <Switch>
+            <Route path="/" exact component={passMovieList}></Route>
+            <Route path="/home" exact component={passMovieList}></Route>
+            <Route path="/trending" exact component={passMovieList}></Route>
+            <Route path="/your-movies" exact component={passYourMovies}></Route>
+          </Switch>
+        </Router>
+        
+        </MovieContext.Provider>
+      </React.Fragment>
+      );
+    }else{
+      console.log("Loading");
+      console.log(this.state.movieList,this.state.userMovies,this.state.userData,this.state.searchQuery,this.state.searchList);
+      return ( 
+        <React.Fragment>
+          <h1>Loading</h1>Loading
+      </React.Fragment>
+       );
+    }
   }
 
   getPopularMovies = () =>{
@@ -102,42 +153,70 @@ class App extends React.Component<AppProps, AppState> {
       .then(response => response.json())
       .then(jsonData => {
         // jsonData is parsed json object received from url
-        this.setState({movieList: jsonData.results, searchList: jsonData.results});
+        tempState.movieList = jsonData.results;
+        tempState.searchList = jsonData.results;
       })
       .catch((error) => {
         // handle your errors here
         console.error(error)
       })
     }
+    console.log("Successfully retrieved Popular Movies!");
     
   }
 
   
-
+//Input from search box is read through onChange property
+//The timeout functions ensures the search doesn't commence
+// until the user has finished typing. 
   readInput = (event:any) => {
+
     if(event.target.value === ''){
+      console.log("Set 3");
       this.setState({movieList: this.state.searchList});
       return;
     }
+
+    //When a new event is triggerd, the old timeout is cleared
+    //and below it is renewed for another 1000ms
+    if(tempState.typingTimeout){
+      clearTimeout(tempState.typingTimeout);
+    }
+
+    tempState.searchQuery = event.target.value;
+    tempState.typingTimeout = setTimeout(() => this.searchInput(tempState.searchQuery), 1000);
+  
+  }
+
+  searchInput = (searchString:string)=> {
+    if(searchString !== tempState.searchQuery){
+      console.log(searchString, tempState.searchQuery);
+      return;
+    }
+    
     //search database for movies based on user input
-    var searchQuery = event.target.value.replace(/ /g,"+");
+    //replaces spaces with "+"
+    var searchQuery = searchString.replace(/ /g,"+");
     fetch('https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page=1&query='+searchQuery)
     .then(response => response.json())
     .then(jsonData => {
-      // jsonData is parsed json object received from url
-      console.log(jsonData.results);
-      this.setState({movieList: jsonData.results});
+
+      //jsonData is parsed json object received from url
+      console.log("Set 4",jsonData.results);
+      this.setState({movieList: jsonData.results, userData: tempState.userData, searchQuery:tempState.searchQuery});
+      //Clear search query once the search has completed
+      tempState.searchQuery = '';
     })
     .catch((error) => {
       // handle your errors here
       console.error(error)
     })
-    this.setState({searchQuery: event.target.value});
-    console.log(this.state.searchQuery);
-  }
+      
+    }
 
   
   readFromFirebase(){
+    console.log(this.state.userData);
     //read document from emmanuel-augustine/movie-recommendation-app
     db.collection("emmanuel-augustine").doc("movie-recommendation-app").get()
     .then( (movies) => {
@@ -146,12 +225,13 @@ class App extends React.Component<AppProps, AppState> {
             //make JSON into an array to make it iterable.
             var userData:any = Object.assign([], movies.data());
             console.log("Movies successfully read to Firebase!");
-            console.log(userData);
+            console.log(userData,"Set 6");
 
             //store user Data
-            this.setState({userData: userData})
+            //this.setState({userData: userData});
 
             //query movie Database
+            calculateRecomendation(userData);
             this.readFromTMDB(userData);
 
         }else{
@@ -180,10 +260,18 @@ for(var i = 0; i < movies.length; i++){
 
 //request all promises in the promises array
 // save the resolved requests into the state
-Promise.all(promises).then(movies => {
+Promise.all(promises).then(movieData => {
 
-    console.log(movies);
-    this.setState({userMovies: movies});
+    //console.log(movies);
+    console.log("Set 7");
+    //return movies;
+    
+    this.setState({userMovies: movieData, userData: movies, movieList: tempState.movieList, searchList: tempState.searchList});
+    
+    tempState. userMovies = movieData;
+    tempState.userData = movies;
+    
+
 
 })
 .catch((error) => {
@@ -192,6 +280,19 @@ Promise.all(promises).then(movies => {
   })
 }
 
+//Takes an Array of Objects [{},{},...] as an input
+//Writes user movies into Firebase
+addToFirebase(movies:Array<any>){
+  var movieObjects = Object.assign({}, movies);
+  // Add a new document in collection "cities"
+  db.collection("emmanuel-augustine").doc("movie-recommendation-app").set(movieObjects)
+  .then(function() {
+      console.log("Movies successfully written to Firebase!");
+  })
+  .catch(function(error) {
+      console.error("Error writing document to Firebase: ", error);
+  });
+}
 
 }
  

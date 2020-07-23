@@ -2,12 +2,12 @@ import * as React from 'react';
 //import {movies} from './recommendation';
 //import {db} from '../fbconfig';
 import MovieList from './movieList';
-
-var userMovies = [];
+import { MovieContext } from '../movieContext';
 
 export interface YourMoviesProps {
     userData: Array<any>,
-    userMovies: Array<any>
+    userMovies: Array<any>,
+    modifyData: Function
     
 }
  
@@ -23,19 +23,25 @@ class YourMovies extends React.Component<YourMoviesProps, YourMoviesState> {
         //userData: this.props.userData
     }
     render() {
+        let props = this.props;
+
         if(this.props.userMovies.length === 0){
             return ( 
                 <React.Fragment>
-                    <h1>YourMovies</h1>
-                    {/*<button onClick={this.readFromFirebase.bind(this)}></button>*/}
+                    
                 </React.Fragment>
              );
         }
         else{
             return(
-            <React.Fragment>
-                <MovieList movieList={this.props.userMovies}/>
-            </React.Fragment>
+                <MovieContext.Consumer>
+                    {value =>
+                    <div> 
+                    {/* {<ul>{value.userData.map((item:any) => <li>{item.id}</li>)}</ul>} */}
+                    <MovieList movieList={value.userMovies}/></div>
+                    }
+                </MovieContext.Consumer>
+                
             );
         }
     }

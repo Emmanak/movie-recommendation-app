@@ -25,8 +25,11 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
     handleKeyPress(target:any) {
         if(target.charCode === 13){
-          var button = document.getElementById("searchMoviesButton") as HTMLButtonElement;
-          button.click();
+          //var button = document.getElementById("searchMoviesButton") as HTMLButtonElement;
+          //button.click();
+          //this.props.handleChange();
+          console.log(target.charCode);
+          alert("Enter Key pressed");
         } 
       }
 
@@ -44,7 +47,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                         </Nav>
                         <Form inline>
                         <FormControl onChange={this.props.handleChange} onKeyPress={this.handleKeyPress} id="movieSearchBar" type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button id="searchMoviesButton" variant="outline-success">Search Movies</Button>
+                        {/* <Button id="searchMoviesButton" onClick={(e:any) => {e.preventDefault(); this.props.handleChange(e)}} variant="outline-success">Search Movies</Button> */}
                         </Form>
                     </Navbar.Collapse>
                     </Navbar>

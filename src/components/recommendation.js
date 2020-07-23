@@ -1,5 +1,5 @@
 //import brain from 'brain.js';
-/*import {movieID} from './moviecard';
+import {movieID} from './moviecard';
 import {db} from '../fbconfig';
 import {localmovies, yourmovies, movieRatings, testCase} from './movie-genre-variables';
 import {test} from './navbar';
@@ -114,7 +114,12 @@ function rateMovie(movieID){
         var movieJson = createTrainingData(testMovie);
         console.log(movieJson);
         let result = network.run(movieJson[0].input);
-        alert(result.like+"   "+result.dislike);
+        //alert(result.like+"   "+result.dislike);
+        let rating = Math.round(result.like*100);
+        console.log(movieID,rating);
+        //alert(movieID,rating);
+        document.getElementById(movieID+"popup").textContent = rating.toString();
+        return rating;
         
       })
       .catch((error) => {
@@ -160,7 +165,7 @@ function calculateRecomendation(movies){
     })
     .catch((error) => {
         // handle your errors here
-        console.error(error)
+        console.error(error) 
       })
 }
 
@@ -199,14 +204,14 @@ function readFromFirebase(movies){
     });
 }
 
-var movies = [];
-readFromFirebase(movies);
-rateMovie(movieID);
-console.log(testCase);
+//var movies = [];
+//readFromFirebase(movies);
+//rateMovie(movieID);
+//console.log(testCase);
 
 
 
 
 export {rateMovie};
-export{movies};
-*/
+//export{movies};
+export {calculateRecomendation}
