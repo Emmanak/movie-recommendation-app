@@ -8,6 +8,7 @@ import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import { rateMovie } from './recommendation';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import {Genre} from './genre';
 
 var movieID = 0;
 
@@ -16,6 +17,7 @@ export interface MovieCardProps {
     media_type: string,
     movieName: string,
     image: string,
+    movieInfo: any,
     overview: string,
     rating: any
     
@@ -51,11 +53,14 @@ class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
         <Card.Body>
             {/* <Button onClick={()=> rateMovie(parseInt(this.props.id.replace('card-','')))}>Calculate Rating</Button> */}
         {/* {<button onClick={() => value.modifyData({id:2702151, type:"movie", rating:0})}>Test Context</button>} */}
-            <Card.Title>{this.props.movieName} <p><h6>Score: <span id={parseInt(this.props.id.replace('card-',''))+"popup"} className="badge badge-primary">NaN</span></h6></p>
+            <Card.Title>{this.props.movieName} <p><h6>Your Score: <span id={parseInt(this.props.id.replace('card-',''))+"popup"} className="badge badge-primary">NaN</span></h6></p>
             </Card.Title>
             
             <Card.Text>
                 {movieOverview(this.props)}
+                {moreInfo(this.props.movieInfo)}
+                
+                
             
             </Card.Text>
         </Card.Body>
@@ -66,56 +71,9 @@ class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
     }
 }
 
-function showRating(movie:any):any{
-    console.log("This is the id of the movie",movie);
-    rateMovie(movie);
-
-    return (
-        <Popover id="popover-basic">
-            <Popover.Title as="h3">Your Rating</Popover.Title>
-            <Popover.Content>
-            <strong><span id={movie+"popup"}>Calculating...</span></strong>
-            </Popover.Content>
-        </Popover>
-    );
-
-}
-
-
-
-// function MovieCard(props: any){
-//     return (
-//         <MovieContext.Consumer>
-//                 {value => 
-                
-                
-//         <TransitionGroup>
-//             <CSSTransition in={true} appear={true} key={'cardAnimation'+props.id.toString()} timeout={1500} classNames="card">        
-//         <Card style={{ width: '15rem' }}>
-//             <div className="addMovie">
-//                 <button onClick={(e) => addToYourMovies(value,props,e)}  id={props.id} className={cardClassname(value,props)}/>
-//                 <Card.Img variant="top" src={movieImage(props)}/>
-//             </div>
-        
-//         <Card.Body>
-//         {/* {<button onClick={() => value.modifyData({id:2702151, type:"movie", rating:0})}>Test Context</button>} */}
-//             <Card.Title>{props.movieName}</Card.Title>
-//             <Card.Text>
-//                 {movieOverview(props)}
-            
-//             </Card.Text>
-//         </Card.Body>
-//         </Card>
-//         </CSSTransition>
-//         </TransitionGroup>}
-//         </MovieContext.Consumer>
-//      );
-                
-// }
-
 const movieOverview = (props:any) => {
     if(props.overview !== undefined){
-        return props.overview.substring(0,65)+"...";
+        return props.overview.substring(0,45)+"...";
     }
     else{
         return props.overview;
@@ -154,6 +112,43 @@ const cardClassname = (value:any, props:any) =>{
 
 
 
+}
+
+const moreInfo = (props:any) =>{
+    var genre:Array<any> = props.genre_ids;
+    var genre2:Array<any> = props.genres;
+
+    if(genre2 === undefined){
+            genre2 = [
+                {id:"NaN"}
+            ];
+    }
+    if(genre === undefined && genre2 !== undefined){
+        var new_genre = [];
+        for(var i = 0; i < genre2.length; i++){
+            new_genre[i] = genre2[i].id;
+        }
+        genre = new_genre;
+    }
+
+    return(
+        <OverlayTrigger
+        placement="bottom"
+        delay={{ show: 250, hide: 1000 }}
+        overlay={
+        <Popover id="popover-basic">
+            <Popover.Title as="h3">About</Popover.Title>
+            <Popover.Content>
+            
+            <p><strong>Date: </strong>{props.release_date ? props.release_date : props.first_air_date}</p>
+            <p><strong>Average Score: </strong>{+props.vote_average+"/10"} ({props.vote_count} votes)</p>
+            <p>{props.overview}</p>
+            <p><strong>Genre: </strong><ul>{genre.map( (genreID:number) => <li>{Genre(genreID)}</li>)}</ul></p>
+            </Popover.Content>
+      </Popover>}>
+        <span className="badge badge-secondary"> More</span></OverlayTrigger>
+    );
+    
 }
 
 const addToYourMovies = (value:any, props:any,e:any) => {

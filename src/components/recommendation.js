@@ -35,9 +35,10 @@ function CreateInput() {
     this.id10752=0;
     this.id10768=0;
     this.id37=0;
-    //this.budget=0;
+    this.date=0;
+    this.budget=0;
     this.popularity=0;
-    //this.revenue=0;
+    this.revenue=0;
     this.vote_average=0;
     this.vote_count=0;
 
@@ -57,39 +58,40 @@ var trainingData;
 function createTrainingData(movies){
 
     var moviesLength = movies.length;
-    console.log(moviesLength);
-    console.log(movieRatings[movies[0].id]);
+    //console.log(moviesLength);
+    //console.log(movieRatings[movies[0].id]);
 
-   console.log("Test get Your Movies:");
+   //console.log("Test get Your Movies:");
    
     //Creating Training Data using a Users Movies list and
     // a list of all available genres
     var trainingData = [];
-    console.log(trainingData);
+    //console.log(trainingData);
     for(var i = 0; i < moviesLength; i++){
         var genreLength = movies[i].genres.length;
         trainingData.push({input: new CreateInput(), output: new CreateOutput()});
         var index = trainingData.length-1;
-        console.log(index);
+        //console.log(index);
         //trainingData[i] = {input: new CreateInput(), output: new CreateOutput()}//JSON.parse(JSON.stringify(input_object));
         for(var j = 0; j < genreLength; j++){
-            console.log(movies[i].genres[j].id);
+            //console.log(movies[i].genres[j].id);
             trainingData[index].input["id"+movies[i].genres[j].id] = 1;
         }
-        //trainingData[index].input.budget = Math.log10(movies[i].budget)/(1 + (Math.log10(movies[i].budget)));
-        trainingData[index].input.popularity = Math.log10(movies[i].popularity)/(1 + (Math.log10(movies[i].popularity)));
-        //trainingData[index].input.revenue = Math.log10(movies[i].revenue)/(1 + (Math.log10(movies[i].revenue)));
+        trainingData[index].input.budget = movies[i].budget/400000000;//Math.log10(movies[i].budget)/(1 + (Math.log10(movies[i].budget)));
+        trainingData[index].input.popularity = movies[i].popularity/250;//Math.log10(movies[i].popularity)/(1 + (Math.log10(movies[i].popularity)));
+        trainingData[index].input.revenue = movies[i].revenue/3000000000;//Math.log10(movies[i].revenue)/(1 + (Math.log10(movies[i].revenue)));
         trainingData[index].input.vote_average = movies[i].vote_average/10;
+        trainingData[index].input.date = Math.log10(new Date(movies[i].release_date).getTime())/(1+ Math.log10(new Date().getTime()));
         trainingData[index].input.vote_count = Math.log10(movies[i].vote_count)/(1 + (Math.log10(movies[i].vote_count)));
         //trainingData[index].output.like = (movieRatings[movies[i].id])/5;
         //trainingData[index].output.dislike = 1-((movieRatings[movies[i].id])/5);
         trainingData[index].output.like = 1*(movies[i].aiRating);
         trainingData[index].output.dislike = 1-((movies[i].aiRating));
 
-        console.log(trainingData[index]);
+        //console.log(trainingData[index]);
         
     }
-    console.log(trainingData);
+    //console.log(trainingData);
     return(trainingData);
 }
 
@@ -99,7 +101,7 @@ function createTrainingData(movies){
 //Takes an input of a movieID
 function rateMovie(movieID){
     if(movieID === 0){
-        console.log(movieID);
+        //console.log(movieID);
         return;
     }
     fetch("https://api.themoviedb.org/3/movie/"+movieID+"?api_key=04c67358ca6817bcec69c61716577d76&language=en-US")
@@ -108,15 +110,15 @@ function rateMovie(movieID){
         // jsonData is parsed json object received from url
 
         
-        console.log(movieID);
+        //console.log(movieID);
         let testMovie = [jsonData];
-        console.log(testMovie);
+        //console.log(testMovie);
         var movieJson = createTrainingData(testMovie);
-        console.log(movieJson);
+        //console.log(movieJson);
         let result = network.run(movieJson[0].input);
         //alert(result.like+"   "+result.dislike);
         let rating = Math.round(result.like*100);
-        console.log(movieID,rating);
+        //console.log(movieID,rating);
         //alert(movieID,rating);
         document.getElementById(movieID+"popup").textContent = rating.toString();
         return rating;

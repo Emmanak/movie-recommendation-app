@@ -41,7 +41,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                        <Nav.Link href="trending">Trending Movies</Nav.Link>
+                        <Nav.Link href="discover">Discover</Nav.Link>
                         <Nav.Link href="your-movies">Your Movies</Nav.Link>
                         {/*<button onClick={() => {rateMovie(movieID)}}>Rate Movies</button>*/}
                         </Nav>

@@ -1,14 +1,13 @@
 import React,{useEffect} from 'react';
-import './App.css';
-import MovieList from './components/movieList';
-import NavBar from "./components/navbar";
+import MovieList from './movieList';
+import NavBar from "./navbar";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import YourMovies from './components/yourmovies';
-import {db} from './fbconfig';
-import {MovieContext} from './movieContext';
-import {calculateRecomendation} from './components/recommendation';
-import DropdownFilter from './components/dropdownFilter';
-import {getPopularMovies} from './components/getpopularmovies';
+import YourMovies from './yourmovies';
+import {db} from '../fbconfig';
+import {MovieContext} from '../movieContext';
+import {calculateRecomendation} from './recommendation';
+import DropdownFilter from './dropdownFilter';
+import {getPopularMovies} from './getpopularmovies';
 
 
 //Local Variables to reduce usage
@@ -27,11 +26,11 @@ var tempState:any = {
 
 
 
-export interface AppProps {
+export interface MovieAppProps {
   
 }
  
-export interface AppState {
+export interface MovieAppState {
   movieList: Array<any>,
   searchQuery: string,
   searchList: Array<any>,
@@ -44,7 +43,7 @@ export interface AppState {
 
 
  
-class App extends React.Component<AppProps, AppState> {
+class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
   state = { 
     movieList: [],
@@ -299,4 +298,4 @@ addToFirebase(movies:Array<any>){
 
 }
  
-export default App;
+export default MovieApp;

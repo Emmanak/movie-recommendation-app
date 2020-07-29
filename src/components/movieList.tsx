@@ -61,6 +61,7 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
                         id={"card-"+movie.id}
                         media_type = {movie.media_type}
                         movieName={movie.title}
+                        movieInfo={movie}
                         rating={rateMovie(movie.id)} 
                         image={"https://image.tmdb.org/t/p/w500"+movie.poster_path}
                         overview={movie.overview}/>
