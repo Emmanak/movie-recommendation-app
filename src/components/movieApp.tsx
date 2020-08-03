@@ -92,9 +92,14 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
         return(
             <React.Fragment>
-            <Button onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Previous Page</Button>
-            <DropdownFilter changeFilter={this.filterDiscoverMovies}></DropdownFilter>
-            <Button onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
+                <div className="d-flex justify-content-center">
+                    <div className="row pb-5">
+                        <Button onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Previous Page</Button>
+                        <DropdownFilter changeFilter={this.filterDiscoverMovies}></DropdownFilter>
+                        <Button onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
+                    </div>
+                </div>
+            
             <MovieList renderReady={this.state.renderReady} 
             movieList={this.state.discoverPage.length === 0 ? this.props.discoverPage : this.state.discoverPage}/>
             </React.Fragment>
