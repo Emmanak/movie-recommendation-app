@@ -19,7 +19,8 @@ var tempState:any = {
   userMovies: [],
   searchList : [],
   typingTimeout: 0,
-  discoverMovies : []
+  discoverMovies : [],
+  filterValue: "popularity.desc"
 }
 
 
@@ -40,7 +41,10 @@ export interface MovieAppState {
   modifyData: Function,
   renderReady: boolean,
   discoverPage: any,
-  pageNumber: number
+  pageNumber: number,
+  searchPage: number,
+  filterValue: string,
+  setFilter: Function
 
   
 }
@@ -66,7 +70,12 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
     renderReady: false,
     discoverPage: [],
     pageNumber: 1,
-    searchPage: 1
+    searchPage: 1,
+    filterValue: "popularity.desc",
+    setFilter: (filter:string) => {
+        tempState.filterValue = filter;
+    }
+
     }
 
     
@@ -93,10 +102,10 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
         return(
             <React.Fragment>
                 <div className="d-flex justify-content-center">
-                    <div className="row pb-5">
-                        <Button onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Previous Page</Button>
-                        <DropdownFilter changeFilter={this.filterDiscoverMovies}></DropdownFilter>
-                        <Button onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
+                    <div className="row pt-5">
+                        <Button className="mr-2" onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Prev Page</Button>
+                        <DropdownFilter filterValue={this.state.filterValue} setFilter={this.state.setFilter} changeFilter={this.filterDiscoverMovies}></DropdownFilter>
+                        <Button className="ml-2" onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
                     </div>
                 </div>
             
@@ -186,7 +195,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
     //set filter
     console.log("Filter Value: "+filterValue);
-    var discoverFilter = 'popularity.desc';
+    var discoverFilter = tempState.filterValue;
     if(filterValue !== undefined){
       discoverFilter = filterValue;
     }
@@ -216,7 +225,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
         console.log(jsonData.results);
         tempState.discoverMovies = jsonData.results;
-        this.setState({discoverPage:jsonData.results, pageNumber: pageNumber});
+        this.setState({discoverPage:jsonData.results, pageNumber: pageNumber, filterValue:tempState.filterValue});
         console.log("Successfully retrieved Popular Movies!");
 
     })

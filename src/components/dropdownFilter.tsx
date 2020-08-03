@@ -19,29 +19,45 @@ const filters = [
 ];
 
 export interface DropdownFilterProps {
-    changeFilter: Function
+    changeFilter: Function,
+    setFilter: Function,
+    filterValue:string
     
 }
  
 export interface DropdownFilterState {
+    filterName: string
     
 }
  
 class DropdownFilter extends React.Component<DropdownFilterProps, DropdownFilterState> {
-    //state = { :  }
+    state = { 
+        filterName: "popularity.desc"
+    }
     render() { 
         return(
             <Dropdown>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    Dropdown Button
+                    Filter: {this.props.filterValue}
                 </Dropdown.Toggle>
     
                 <Dropdown.Menu>
-                    {filters.map((filter:string) => <Dropdown.Item onClick={()=> this.props.changeFilter(filter)}>{filter}</Dropdown.Item>)}
+                    {filters.map((filter:string) => <Dropdown.Item onClick={()=> this.applyFilter(filter)}>{filter}</Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown>
         );
     }
+
+    applyFilter = (filter:string) => {
+        //change button name
+        this.props.setFilter(filter)
+
+        //apply filter
+        this.props.changeFilter(filter);
+
+    }
+
+
 }
  
 export default DropdownFilter;

@@ -117,7 +117,21 @@ function rateMovie(movieID){
         let rating = Math.round(result.like*100);
         //console.log(movieID,rating);
         //alert(movieID,rating);
-        document.getElementById(movieID+"popup").textContent = rating.toString();
+        var matchRating = document.getElementById(movieID+"popup");
+        if(rating < 70 && rating >= 40){
+            matchRating.className = "badge badge-warning";
+            matchRating.textContent = rating.toString()+ "% Match";
+        }
+        else if(rating < 40){
+            matchRating.className = "badge badge-danger";
+            matchRating.textContent = rating.toString()+ "% Match";
+        }
+        else if(rating >= 70){
+            matchRating.className = "badge badge-success";
+            matchRating.textContent = rating.toString()+ "% Match";
+        }
+
+        
         return rating;
         
       })

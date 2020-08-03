@@ -183,3 +183,8 @@
     top: 0;
  }
 }
+
+/*List styling*/
+li{
+  list-style-type: none;
+}

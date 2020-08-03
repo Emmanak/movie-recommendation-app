@@ -44,9 +44,9 @@ class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
 
                         <Card.Body>
 
-                            <Card.Title>{this.props.movieName} <p><h6>Your Match: 
+                            <Card.Title>{this.props.movieName} <p> 
                                 <span id={parseInt(this.props.id.replace('card-',''))+"popup"} 
-                            className="badge badge-primary">NaN</span></h6></p>
+                            className="badge badge-primary">Match Unavailable</span></p>
                             </Card.Title>
 
                             <Card.Text>
@@ -131,10 +131,10 @@ const moreInfo = (props:any) =>{
         <Popover id="popover-basic">
             <Popover.Title as="h3">About</Popover.Title>
                 <Popover.Content>
-                    <p><strong>Date: </strong>{props.release_date ? props.release_date : props.first_air_date}</p>
-                    <p><strong>Average Score: </strong>{+props.vote_average+"/10"} ({props.vote_count} votes)</p>
+                    <p><span className="badge badge-warning"><strong>{+props.vote_average+"/10"}</strong></span> ({props.vote_count} votes)</p>
                     <p>{props.overview}</p>
-                    <p><strong>Genre: </strong><ul>{genre.map( (genreID:number) => <li>{Genre(genreID)}</li>)}</ul></p>
+                    <p><strong>Genre: </strong>{genre.map( (genreID:number) => <span className="badge badge-secondary ml-1">{Genre(genreID)}</span>)}</p>
+                    <p><span className="badge badge-primary">{props.release_date ? props.release_date : props.first_air_date}</span></p>
                 </Popover.Content>
       </Popover>}>
         <span className="badge badge-secondary"> More</span></OverlayTrigger>
