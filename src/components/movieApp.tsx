@@ -92,7 +92,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
         return(
             <React.Fragment>
-            <Button onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Next Page</Button>
+            <Button onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Previous Page</Button>
             <DropdownFilter changeFilter={this.filterDiscoverMovies}></DropdownFilter>
             <Button onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
             <MovieList renderReady={this.state.renderReady} 
