@@ -1,13 +1,12 @@
 import * as React from 'react';
 import MovieCard from './moviecard';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
 import {rateMovie} from './recommendation';
-//import {TransitionGroup, CSSTransition} from 'react-transition-group';
+import Loading from './loading';
 
 
 export interface MovieListProps {
-    movieList: Array<any>
+    movieList: Array<any>,
+    renderReady: boolean
     
 }
  
@@ -28,8 +27,8 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
         update: false
     }
     componentDidMount(){
-        console.log(this.state.update);
-        this.setState({ update: true});
+        //console.log(this.state.update);
+        //this.setState({ update: true});
         console.log("Set 8");
     }
     componentWillUnmount(){
@@ -37,7 +36,8 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
     }
     render() {
         //console.log(this.props.movieList)
-        if(this.state.update === true && this.props.movieList !== []){
+
+        if(this.props.movieList !== [] && this.props.renderReady === true){
             return (
                 // <TransitionGroup>
                 // <div id='movieList' className="container">
@@ -74,6 +74,7 @@ class MovieList extends React.Component<MovieListProps, MovieListState> {
             //console.log(this.state.movieList);
             return(
                 <div>
+                    <Loading></Loading>
                 </div>
             );
         }

@@ -7,7 +7,8 @@ import { MovieContext } from '../movieContext';
 export interface YourMoviesProps {
     userData: Array<any>,
     userMovies: Array<any>,
-    modifyData: Function
+    modifyData: Function,
+    renderReady: boolean
     
 }
  
@@ -38,7 +39,7 @@ class YourMovies extends React.Component<YourMoviesProps, YourMoviesState> {
                     {value =>
                     <div> 
                     {/* {<ul>{value.userData.map((item:any) => <li>{item.id}</li>)}</ul>} */}
-                    <MovieList movieList={value.userMovies}/></div>
+                    <MovieList renderReady={this.props.renderReady} movieList={value.userMovies}/></div>
                     }
                 </MovieContext.Consumer>
                 

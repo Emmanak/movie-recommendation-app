@@ -1,7 +1,4 @@
-//import brain from 'brain.js';
-import {movieID} from './moviecard';
 import {db} from '../fbconfig';
-import {localmovies, yourmovies, movieRatings, testCase} from './movie-genre-variables';
 import {test} from './navbar';
 const brain = require('brain.js');
 const network = new brain.NeuralNetwork();

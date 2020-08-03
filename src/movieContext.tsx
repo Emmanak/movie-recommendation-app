@@ -1,5 +1,4 @@
 import React from 'react';
-//import React,{useState, createContext} from 'react';
 
 export interface ContextInterface {
     movieList: Array<any>,
@@ -7,7 +6,11 @@ export interface ContextInterface {
     searchList: Array<any>,
     userData: Array<any>,
     userMovies: Array<any>,
-    modifyData: Function
+    modifyData: Function,
+    renderReady: boolean,
+    discoverPage:any,
+    pageNumber: number,
+    searchPage: number
 }
 
 let defaultvalue : ContextInterface = {
@@ -16,20 +19,13 @@ let defaultvalue : ContextInterface = {
     searchList: [],
     userData: [],
     userMovies: [],
-    modifyData: () =>{}
+    modifyData: () =>{},
+    renderReady: false,
+    discoverPage: [],
+    pageNumber: 1,
+    searchPage: 1
 }
 
 export const MovieContext = React.createContext(defaultvalue);
-
-
-
-
-/*export const MovieContext:any = createContext<ContextInterface | null>(null);
-
-export const MovieProvider = (props:any) => {
-    const [movies, setMovies] = useState([]);
-    return <MovieContext.Provider>{props.children}</MovieContext.Provider>
-};*/
-
 
 

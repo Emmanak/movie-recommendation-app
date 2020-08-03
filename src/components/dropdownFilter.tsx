@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dropdown from 'react-bootstrap/Dropdown'
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const filters = [
     "popularity.asc",
@@ -37,7 +37,7 @@ class DropdownFilter extends React.Component<DropdownFilterProps, DropdownFilter
                 </Dropdown.Toggle>
     
                 <Dropdown.Menu>
-                    {filters.map((filter:string) => <Dropdown.Item href="/discover" onClick={() => this.props.changeFilter(filter)}>{filter}</Dropdown.Item>)}
+                    {filters.map((filter:string) => <Dropdown.Item onClick={()=> this.props.changeFilter(filter)}>{filter}</Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown>
         );

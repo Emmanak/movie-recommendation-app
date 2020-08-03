@@ -3,16 +3,14 @@ import * as React from 'react';
 
 //Method returns discover query from TMDB
   //save a list of movie objects to tempState
-  function getPopularMovies (tempState:any, init_flag:boolean, filterValue?:string){
-    if(init_flag === true){
-      return;
-    }
+  function getPopularMovies (setState:any,filterValue?:string){
+
     console.log("Filter Value: "+filterValue);
     var discoverFilter = 'popularity.desc';
     if(filterValue !== undefined){
       discoverFilter = filterValue;
     }
-    alert(discoverFilter);
+    //alert(discoverFilter);
 
     const query = {
       popular: 'https://api.themoviedb.org/3/movie/popular?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=',
@@ -29,8 +27,9 @@ import * as React from 'react';
       .then(jsonData => {
         
         //jsonData is parsed json object received from url
-        tempState.discoverMovies = jsonData.results;
-        init_flag = true;
+        setState(jsonData.results);
+        //tempState.discoverMovies = jsonData.results;
+        //init_flag = true;
         //tempState.movieList = jsonData.results;
         //tempState.searchList = [];
       })
@@ -45,4 +44,3 @@ import * as React from 'react';
 
   export {getPopularMovies};
 
-  

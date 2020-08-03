@@ -1687,4 +1687,4 @@ var localmovies = [
 
 
 
-        export {localmovies, yourmovies, movieRatings, testCase, formattedMovies};
+        export {localmovies, yourmovies, movieRatings, testCase, formattedMovies, genres};

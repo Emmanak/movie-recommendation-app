@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import MovieList from './movieList';
 import NavBar from "./navbar";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
@@ -7,11 +7,10 @@ import {db} from '../fbconfig';
 import {MovieContext} from '../movieContext';
 import {calculateRecomendation} from './recommendation';
 import DropdownFilter from './dropdownFilter';
-import {getPopularMovies} from './getpopularmovies';
+import Button from 'react-bootstrap/Button';
 
 
-//Local Variables to reduce usage
-//of setState
+//Local Variables to reduce usage of setState
 var init_flag:boolean = false;
 var tempState:any = {
   movieList : [],
@@ -27,6 +26,8 @@ var tempState:any = {
 
 
 export interface MovieAppProps {
+    discoverPage:any,
+    setDiscoverPage: any
   
 }
  
@@ -36,7 +37,11 @@ export interface MovieAppState {
   searchList: Array<any>,
   userData: Array<any>,
   userMovies: Array<any>,
-  modifyData: Function
+  modifyData: Function,
+  renderReady: boolean,
+  discoverPage: any,
+  pageNumber: number
+
   
 }
 
@@ -57,7 +62,11 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       tempState.userData = movies;
       this.addToFirebase(movies);
       console.log(movies);
-    }
+    },
+    renderReady: false,
+    discoverPage: [],
+    pageNumber: 1,
+    searchPage: 1
     }
 
     
@@ -66,8 +75,6 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
     componentWillMount(){
       if(init_flag === false){
         this.readFromFirebase();
-        //this.getPopularMovies();
-        //init_flag = true;
       }
       
     }
@@ -77,30 +84,40 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
   render() {
 
-    getPopularMovies(tempState, init_flag);
     
 
     //Used to send props with MovieList Component in react-router
     const passMovieList = () => {
-      if(this.state.searchQuery === '' ){
+      if(this.state.searchQuery === '' || tempState.searchQuery === '' ){
+
         return(
-          <MovieList movieList={tempState.discoverMovies}/>
-        );
+            <React.Fragment>
+            <Button onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Next Page</Button>
+            <DropdownFilter changeFilter={this.filterDiscoverMovies}></DropdownFilter>
+            <Button onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
+            <MovieList renderReady={this.state.renderReady} 
+            movieList={this.state.discoverPage.length === 0 ? this.props.discoverPage : this.state.discoverPage}/>
+            </React.Fragment>
+          );        
+
       }else{
-        console.log(this.state.searchQuery, this.state.searchList);
+
+        console.log(this.state.searchQuery, this.state.searchList, tempState.searchQuery);
         return(
-          <MovieList movieList={this.state.searchList}/>
+            <MovieList renderReady={this.state.renderReady} movieList={this.state.searchList}/>
         );
+
       }
       
     }
 
     //Pass YourMovies component with props into react-router
     const passYourMovies = () => {
-      if(this.state.searchList.length === 0){
+      if(this.state.searchQuery === ''){
         console.log("Your Movies!")
         return(
           <YourMovies
+          renderReady={this.state.renderReady}
           userData={this.state.userData}
           userMovies={this.state.userMovies}
           modifyData={this.state.modifyData}>
@@ -110,7 +127,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       else{
         console.log("Search List!", this.state.searchList)
         return(
-          <MovieList movieList={this.state.searchList}/>
+          <MovieList renderReady={this.state.renderReady} movieList={this.state.searchList}/>
         );
       }
       
@@ -118,8 +135,8 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
     let that = this.state;
 
-    if(that.movieList !== [] && that.searchList !== [] && that.userData !== [] && that.userMovies !== []){
-      console.log("")
+    if(that.movieList !== [] && that.searchList !== [] && that.userData !== [] && that.userMovies !== [] && this.state.discoverPage !== undefined){
+      console.log(this.props.discoverPage);
       return(
         <React.Fragment>
           <MovieContext.Provider value={this.state}>
@@ -127,7 +144,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
         <div id='navbar'>
             <NavBar handleChange={this.readInput}/>
         </div>
-        <DropdownFilter changeFilter={getPopularMovies}></DropdownFilter>
+        
         
         <Router>
           <Switch>
@@ -141,13 +158,16 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
         </MovieContext.Provider>
       </React.Fragment>
       );
+
+      
     }else{
-      console.log("Loading");
-      console.log(this.state.movieList,this.state.userMovies,this.state.userData,this.state.searchQuery,this.state.searchList);
-      return ( 
-        <React.Fragment>
-          <h1>Loading</h1>Loading
-      </React.Fragment>
+        console.log(this.props.discoverPage);
+        console.log("Loading");
+        console.log(this.state.movieList,this.state.userMovies,this.state.userData,this.state.searchQuery,this.state.searchList);
+        return ( 
+            <React.Fragment>
+            <div>Loading MovieApp</div>
+        </React.Fragment>
        );
     }
   }
@@ -155,16 +175,70 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
   
 
-  
+//Method returns discover query from TMDB
+  //save a list of movie objects to tempState
+  filterDiscoverMovies = (filterValue?:string, page?:string) => {
+
+    //set filter
+    console.log("Filter Value: "+filterValue);
+    var discoverFilter = 'popularity.desc';
+    if(filterValue !== undefined){
+      discoverFilter = filterValue;
+    }
+
+    //set pageNumber for serach query
+    var pageNumber = this.state.pageNumber;
+    if(page === 'previous page'){
+        if(pageNumber > 1){
+            pageNumber--;
+        }
+    }else if(page === 'next page'){
+        pageNumber++;
+    }
+
+    const query = {
+      popular: 'https://api.themoviedb.org/3/movie/popular?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=1',
+      trending: 'https://api.themoviedb.org/3/trending/all/day?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&page=',
+      multi: 'https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page=1&query=family',
+      discover: 'https://api.themoviedb.org/3/discover/movie?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&sort_by='+discoverFilter+'&include_adult=false&include_video=false&page='
+    }
+    console.log(query.discover);
+
+    //get current popular movies from the database
+    fetch(query.discover+pageNumber.toString())
+    .then(response => response.json())
+    .then(jsonData => {
+
+        console.log(jsonData.results);
+        tempState.discoverMovies = jsonData.results;
+        this.setState({discoverPage:jsonData.results, pageNumber: pageNumber});
+        console.log("Successfully retrieved Popular Movies!");
+
+    })
+    .catch((error) => {
+
+        // handle your errors here
+        console.error(error);
+
+    })
+    
+
+    
+  }
+
 //Input from search box is read through onChange property
 //The timeout functions ensures the search doesn't commence
 //until the user has finished typing. 
   readInput = (event:any) => {
 
+    //If search value is empty then 
+    //restore previous moivie cards
     if(event.target.value === ''){
-      console.log("Set 3");
       tempState.searchList = [];
       tempState.movieList = tempState.discoverMovies;
+      tempState.searchQuery = '';
+      this.setState({searchQuery : ''});
+      console.log(this.state.searchQuery, tempState.searchQuery);
       return;
     }
 
@@ -183,7 +257,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
     //If the searchstring has somehow changed or the search string
     //is 1 character or less in length, then don't complete the search.
-    if(searchString !== tempState.searchQuery || searchString.length <=1){
+    if(searchString !== tempState.searchQuery || searchString.length <=0){
       //If the user only typed 1 letter in search
       //runs before search
       if(this.state.searchList.length === 0){
@@ -193,18 +267,17 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       //If the user deletes all but 1 letter in search
       //runs after search
       tempState.searchList = [];
+      console.log("Set 2")
       this.setState({searchList: tempState.searchList, movieList: tempState.movieList, userData: tempState.userData, searchQuery:tempState.searchQuery});
       tempState.searchQuery = '';
       return;
     }
-    
     //search database for movies based on user input
     //replaces spaces with "+"
     var searchQuery = searchString.replace(/ /g,"+");
     fetch('https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page=1&query='+searchQuery)
     .then(response => response.json())
     .then(jsonData => {
-
       //jsonData is parsed json object received from url
       //setting UserData State to update state with most 
       //recent userData since it isn't updated often
@@ -218,7 +291,6 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       // handle your errors here
       console.error(error)
     })
-      
     }
 
   
@@ -271,8 +343,8 @@ for(var i = 0; i < movies.length; i++){
 Promise.all(promises).then(movieData => {
 
     console.log("Set 7");    
-    this.setState({userMovies: movieData, userData: movies, movieList: tempState.movieList, searchList: tempState.searchList});
-    tempState. userMovies = movieData;
+    this.setState({userMovies: movieData, userData: movies, movieList: tempState.movieList, searchList: tempState.searchList, renderReady: true});
+    tempState.userMovies = movieData;
     tempState.userData = movies;
     
 })
