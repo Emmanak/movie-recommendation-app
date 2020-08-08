@@ -41,6 +41,13 @@
   position:relative;
 }
 
+#mediatag{
+  z-index: 2;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
 .addMovieButton{
   z-index: 1;
   position:absolute;top:0px;left:0px;

@@ -3,6 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
+import BingeButler from '../images/bingebutler.png';
 
 var test:any;
 test = "hey";
@@ -34,7 +35,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         return ( 
             <React.Fragment>
                 <Navbar bg="light" expand="lg">
-                    <Navbar.Brand href="home">Movie Picker</Navbar.Brand>
+                    <Navbar.Brand href="home"><img src={BingeButler} width="80" height="60"></img>BingeButler</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">

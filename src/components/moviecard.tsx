@@ -25,7 +25,7 @@ export interface MovieCardState {
 }
  
 class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
-    //state = { :  }
+    
     render() { 
         return ( 
         <MovieContext.Consumer>
@@ -40,19 +40,21 @@ class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
                             <button onClick={(e) => addToYourMovies(value,this.props,e)}  id={this.props.id} 
                             className={cardClassname(value,this.props)}/>
                             <Card.Img variant="top" src={movieImage(this.props)}/>
+                            <span id="mediatag" className={mediatagClassname(this.props.media_type)}>{this.props.media_type}</span>
                         </div>
 
                         <Card.Body>
 
-                            <Card.Title>{this.props.movieName} <p> 
-                                <span id={parseInt(this.props.id.replace('card-',''))+"popup"} 
+                <Card.Title><span>{this.props.movieName}</span> 
+                            <p><span id={parseInt(this.props.id.replace('card-',''))+"popup"} 
                             className="badge badge-primary">Match Unavailable</span></p>
+                            {moreInfo(this.props.movieInfo)}
                             </Card.Title>
 
-                            <Card.Text>
+                            {/* <Card.Text>
                                 {movieOverview(this.props)}
                                 {moreInfo(this.props.movieInfo)}                              
-                            </Card.Text>
+                            </Card.Text> */}
 
                         </Card.Body>
                     </Card>
@@ -102,8 +104,19 @@ const cardClassname = (value:any, props:any) =>{
         }
     }
 
+}
 
+const mediatagClassname = (media_type:string) =>{
 
+    if(media_type === "movie"){
+        return "badge badge-primary";
+
+    }else if(media_type === "tv"){
+        return "badge badge-warning";
+
+    }else{
+        return "badge badge-secondary";
+    }
 }
 
 const moreInfo = (props:any) =>{
@@ -125,8 +138,9 @@ const moreInfo = (props:any) =>{
 
     return(
         <OverlayTrigger
-        placement="bottom"
-        delay={{ show: 250, hide: 1000 }}
+        placement="auto"
+        trigger='hover'
+        delay={{ show: 250, hide: 5000 }}
         overlay={
         <Popover id="popover-basic">
             <Popover.Title as="h3">About</Popover.Title>
@@ -143,10 +157,6 @@ const moreInfo = (props:any) =>{
 }
 
 const addToYourMovies = (value:any, props:any,e:any) => {
-    if(props.media_type === 'tv'){
-        alert('Sorry, you selected a TV Show. Please select a MOVIE!');
-        return;
-    }
 
     const id = parseInt(props.id.replace('card-',''));
     //use this ID to add movies to a users personal list.
@@ -163,6 +173,10 @@ const addToYourMovies = (value:any, props:any,e:any) => {
         id: id,
         type:"movie",
         rating: 1
+    }
+
+    if(props.media_type === 'tv'){
+        movie.type = "tv";
     }
 
     if(filtered_movie !== undefined){

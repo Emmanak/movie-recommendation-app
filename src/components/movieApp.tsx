@@ -20,7 +20,9 @@ var tempState:any = {
   searchList : [],
   typingTimeout: 0,
   discoverMovies : [],
-  filterValue: "popularity.desc"
+  filterValue: "popularity.desc",
+  pageNumber: 1,
+  searchPage: 1
 }
 
 
@@ -93,32 +95,44 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
   render() {
 
+    console.log(tempState.searchPage);
+
     
 
     //Used to send props with MovieList Component in react-router
     const passMovieList = () => {
-      if(this.state.searchQuery === '' || tempState.searchQuery === '' ){
+      if(this.state.searchQuery === ''){
+
+        console.log(this.state.searchQuery, tempState.searchQuery);
 
         return(
             <React.Fragment>
-                <div className="d-flex justify-content-center">
-                    <div className="row pt-5">
-                        <Button className="mr-2" onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Prev Page</Button>
-                        <DropdownFilter filterValue={this.state.filterValue} setFilter={this.state.setFilter} changeFilter={this.filterDiscoverMovies}></DropdownFilter>
-                        <Button className="ml-2" onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
-                    </div>
+                <div className="d-flex justify-content-center mt-5">
+                    <DropdownFilter filterValue={this.state.filterValue} setFilter={this.state.setFilter} changeFilter={this.filterDiscoverMovies}></DropdownFilter>
                 </div>
             
             <MovieList renderReady={this.state.renderReady} 
             movieList={this.state.discoverPage.length === 0 ? this.props.discoverPage : this.state.discoverPage}/>
+            <div className="d-flex justify-content-center mt-2 mb-5">
+                        <Button className="mr-5" onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Prev Page</Button>
+                        <span className="badge badge-secondary"><h5>Page {this.state.searchPage}</h5></span>
+                        <Button className="ml-5" onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
+            </div>
             </React.Fragment>
           );        
 
       }else{
-
+        
         console.log(this.state.searchQuery, this.state.searchList, tempState.searchQuery);
         return(
-            <MovieList renderReady={this.state.renderReady} movieList={this.state.searchList}/>
+            <React.Fragment>
+                <MovieList renderReady={this.state.renderReady} movieList={this.state.searchList}/>
+                <div className="d-flex justify-content-center mt-2 mb-5">
+                    <Button className="mr-5" onClick={()=>this.searchInput(this.state.searchQuery, 'previous page')}>Prev Page</Button>
+                    <span className="badge badge-secondary"><h5>Page {this.state.searchPage}</h5></span>
+                    <Button className="ml-5" onClick={()=>this.searchInput(this.state.searchQuery, 'next page')}>Next Page</Button>
+                </div>
+            </React.Fragment>
         );
 
       }
@@ -130,18 +144,30 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       if(this.state.searchQuery === ''){
         console.log("Your Movies!")
         return(
-          <YourMovies
-          renderReady={this.state.renderReady}
-          userData={this.state.userData}
-          userMovies={this.state.userMovies}
-          modifyData={this.state.modifyData}>
-          </YourMovies>
+          <React.Fragment>
+            <YourMovies
+            renderReady={this.state.renderReady}
+            userData={this.state.userData}
+            userMovies={this.state.userMovies}
+            modifyData={this.state.modifyData}>
+            </YourMovies>
+            <div className="d-flex justify-content-center mt-2 mb-5">
+            <Button className="ml-5" onClick={this.scroll_to_top}>Scroll to Top</Button>
+            </div>
+          </React.Fragment>
         );
       }
       else{
         console.log("Search List!", this.state.searchList)
         return(
+          <React.Fragment>
           <MovieList renderReady={this.state.renderReady} movieList={this.state.searchList}/>
+          <div className="d-flex justify-content-center mt-2 mb-5">
+                    <Button className="mr-5" onClick={()=>this.searchInput(this.state.searchQuery, 'previous page')}>Prev Page</Button>
+                    <span className="badge badge-secondary"><h5>Page {this.state.searchPage}</h5></span>
+                    <Button className="ml-5" onClick={()=>this.searchInput(this.state.searchQuery, 'next page')}>Next Page</Button>
+          </div>
+          </React.Fragment>
         );
       }
       
@@ -150,7 +176,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
     let that = this.state;
 
     if(that.movieList !== [] && that.searchList !== [] && that.userData !== [] && that.userMovies !== [] && this.state.discoverPage !== undefined){
-      console.log(this.props.discoverPage);
+      
       return(
         <React.Fragment>
           <MovieContext.Provider value={this.state}>
@@ -193,15 +219,18 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
   //save a list of movie objects to tempState
   filterDiscoverMovies = (filterValue?:string, page?:string) => {
 
+
+
     //set filter
     console.log("Filter Value: "+filterValue);
     var discoverFilter = tempState.filterValue;
     if(filterValue !== undefined){
+        tempState.pageNumber = 1;
       discoverFilter = filterValue;
     }
 
     //set pageNumber for serach query
-    var pageNumber = this.state.pageNumber;
+    var pageNumber = tempState.pageNumber;
     if(page === 'previous page'){
         if(pageNumber > 1){
             pageNumber--;
@@ -223,8 +252,12 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
     .then(response => response.json())
     .then(jsonData => {
 
+        //scroll to top when movie list is updated
+        window.scrollTo(0,0);
+
         console.log(jsonData.results);
         tempState.discoverMovies = jsonData.results;
+        tempState.pageNumber = pageNumber;
         this.setState({discoverPage:jsonData.results, pageNumber: pageNumber, filterValue:tempState.filterValue});
         console.log("Successfully retrieved Popular Movies!");
 
@@ -238,6 +271,11 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
     
 
     
+  }
+
+  //Scroll to top of the screen
+  scroll_to_top = () =>{
+    window.scrollTo(0,0);
   }
 
 //Input from search box is read through onChange property
@@ -263,14 +301,25 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
     }
 
     tempState.searchQuery = event.target.value;
+    tempState.searchPage = 1;
     tempState.typingTimeout = setTimeout(() => this.searchInput(tempState.searchQuery), 1000);
   
   }
 
-  searchInput = (searchString:string)=> {
+  searchInput = (searchString:string, page?:string)=> {
+
+    //set pageNumber for serach query
+    var pageNumber = tempState.searchPage;
+    if(page === 'previous page'){
+        if(pageNumber > 1){
+            pageNumber--;
+        }
+    }else if(page === 'next page'){
+        pageNumber++;
+    }
 
     //If the searchstring has somehow changed or the search string
-    //is 1 character or less in length, then don't complete the search.
+    //is less than 1 character in length, then don't complete the search.
     if(searchString !== tempState.searchQuery || searchString.length <=0){
       //If the user only typed 1 letter in search
       //runs before search
@@ -281,15 +330,17 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       //If the user deletes all but 1 letter in search
       //runs after search
       tempState.searchList = [];
+      tempState.searchPage = 1;
       console.log("Set 2")
-      this.setState({searchList: tempState.searchList, movieList: tempState.movieList, userData: tempState.userData, searchQuery:tempState.searchQuery});
+      this.setState({searchList: tempState.searchList, searchPage: tempState.searchPage, 
+        movieList: tempState.movieList, userData: tempState.userData, searchQuery:tempState.searchQuery});
       tempState.searchQuery = '';
       return;
     }
     //search database for movies based on user input
     //replaces spaces with "+"
     var searchQuery = searchString.replace(/ /g,"+");
-    fetch('https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page=1&query='+searchQuery)
+    fetch('https://api.themoviedb.org/3/search/multi?api_key=04c67358ca6817bcec69c61716577d76&language=en-US&include_adult=false&page='+pageNumber+'&query='+searchQuery)
     .then(response => response.json())
     .then(jsonData => {
       //jsonData is parsed json object received from url
@@ -297,9 +348,12 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       //recent userData since it isn't updated often
       console.log("Set 4",jsonData.results);
       tempState.searchList = jsonData.results;
-      this.setState({searchList: tempState.searchList, movieList: tempState.movieList, userData: tempState.userData, searchQuery:tempState.searchQuery});
+      tempState.searchPage = pageNumber;
+      window.scrollTo(0,0); //scroll to top
+      this.setState({searchList: tempState.searchList,  searchPage: pageNumber, movieList: tempState.movieList, 
+        userData: tempState.userData, searchQuery:tempState.searchQuery});
       //Clear search query once the search has completed
-      tempState.searchQuery = '';
+      //tempState.searchQuery = '';
     })
     .catch((error) => {
       // handle your errors here
@@ -325,8 +379,12 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
             //Query movie Database for movie objects.
             //For performance, both calculateRecomentation()
             //and readFromTMDB query movie objects from TMDB. 
-            calculateRecomendation(userData);
-            this.readFromTMDB(userData);
+            if(userData.length > 0){
+              calculateRecomendation(userData);
+              this.readFromTMDB(userData);
+            }else{
+              alert("Please add movies or tv shows to your list!");
+            }
 
         }else{
             console.log("No data found");
@@ -343,7 +401,7 @@ readFromTMDB(movies:Array<any>){
         
 var promises = [];
 for(var i = 0; i < movies.length; i++){
-    promises.push(fetch("https://api.themoviedb.org/3/movie/"+movies[i].id+"?api_key=04c67358ca6817bcec69c61716577d76&language=en-US").then(response => response.json())
+    promises.push(fetch("https://api.themoviedb.org/3/"+movies[i].type+"/"+movies[i].id+"?api_key=04c67358ca6817bcec69c61716577d76&language=en-US").then(response => response.json())
     .then(jsonData => {
         //Append aiRating (like or dislike score) before returning JSON
         var movie = movies.filter(movie => movie.id === jsonData.id);
