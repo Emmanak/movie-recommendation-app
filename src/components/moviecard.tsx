@@ -139,7 +139,7 @@ const moreInfo = (props:any) =>{
     return(
         <OverlayTrigger
         placement="auto"
-        trigger='hover'
+        trigger='click'
         delay={{ show: 250, hide: 5000 }}
         overlay={
         <Popover id="popover-basic">
