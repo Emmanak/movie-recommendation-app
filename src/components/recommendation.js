@@ -171,7 +171,7 @@ function createTrainingData(movies){
         movies: trainingData,
         tv: trainingTVData
     }
-    console.log(inputData);
+    //console.log(inputData);
 
     return(inputData);
 }

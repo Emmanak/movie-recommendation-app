@@ -114,6 +114,10 @@
   z-index: 2;
 }
 
+.popover-resize {
+  max-width: 400px;
+}
+
 /*Movie Card Animation */
 .card-appear {
   opacity: 0;

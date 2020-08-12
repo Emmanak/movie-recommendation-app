@@ -142,7 +142,7 @@ const moreInfo = (props:any) =>{
         trigger='click'
         delay={{ show: 250, hide: 5000 }}
         overlay={
-        <Popover id="popover-basic">
+        <Popover max-width="500px" id="popover-basic">
             <Popover.Title as="h3">About</Popover.Title>
                 <Popover.Content>
                     <p><span className="badge badge-warning"><strong>{+props.vote_average+"/10"}</strong></span> ({props.vote_count} votes)</p>

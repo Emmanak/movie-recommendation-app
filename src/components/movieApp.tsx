@@ -115,7 +115,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
             movieList={this.state.discoverPage.length === 0 ? this.props.discoverPage : this.state.discoverPage}/>
             <div className="d-flex justify-content-center mt-2 mb-5">
                         <Button className="mr-5" onClick={()=>this.filterDiscoverMovies(undefined, 'previous page')}>Prev Page</Button>
-                        <span className="badge badge-secondary"><h5>Page {this.state.searchPage}</h5></span>
+                        <span className="badge badge-secondary"><h5>Page {this.state.pageNumber}</h5></span>
                         <Button className="ml-5" onClick={()=>this.filterDiscoverMovies(undefined, 'next page')}>Next Page</Button>
             </div>
             </React.Fragment>
@@ -283,6 +283,8 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 //until the user has finished typing. 
   readInput = (event:any) => {
 
+    event.preventDefault();
+
     //If search value is empty then 
     //restore previous moivie cards
     if(event.target.value === ''){
@@ -291,6 +293,10 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
       tempState.searchQuery = '';
       this.setState({searchQuery : ''});
       console.log(this.state.searchQuery, tempState.searchQuery);
+      return;
+    }
+    else if(event.target.value === undefined){
+      console.log("Enter Key pressed");
       return;
     }
 
@@ -320,6 +326,7 @@ class MovieApp extends React.Component<MovieAppProps, MovieAppState> {
 
     //If the searchstring has somehow changed or the search string
     //is less than 1 character in length, then don't complete the search.
+    console.log(tempState.searchQuery, searchString);
     if(searchString !== tempState.searchQuery || searchString.length <=0){
       //If the user only typed 1 letter in search
       //runs before search

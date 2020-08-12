@@ -1,19 +1,46 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "BingeB",
+  "name": "BingeButler",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "bingebutler-16.png",
+      "purpose": "any maskable",
+      "type": "image/png",
+      "sizes": "16x16"
     },
     {
-      "src": "logo192.png",
+      "src": "bingebutler-24.png",
+      "purpose": "any maskable",
+      "type": "image/png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "bingebutler-32.png",
+      "purpose": "any maskable",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "bingebutler-48.png",
+      "purpose": "any maskable",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "bingebutler-64.png",
+      "purpose": "any maskable",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "bingebutler-192.png",
+      "purpose": "any maskable",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "bingebutler-512.png",
+      "purpose": "any maskable",
       "type": "image/png",
       "sizes": "512x512"
     }
