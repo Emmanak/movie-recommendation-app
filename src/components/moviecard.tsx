@@ -6,6 +6,7 @@ import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import {Genre} from './genre';
+import imdb from '../images/imdb_link.png';
 
 var movieID = 0;
 
@@ -45,7 +46,8 @@ class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
 
                         <Card.Body>
 
-                <Card.Title><span>{this.props.movieName}</span> 
+                <Card.Title><span>{this.props.movieName} </span>
+                <a href={'https://www.imdb.com/find?q='+this.props.movieName.replace(" ", "+")+'&ref_=nv_sr_sm'}><img src={imdb}></img></a> 
                             <p><span id={parseInt(this.props.id.replace('card-',''))+"popup"} 
                             className="badge badge-primary">Match Unavailable</span></p>
                             {moreInfo(this.props.movieInfo)}
