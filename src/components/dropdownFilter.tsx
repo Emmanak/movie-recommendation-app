@@ -42,7 +42,7 @@ class DropdownFilter extends React.Component<DropdownFilterProps, DropdownFilter
                 </Dropdown.Toggle>
     
                 <Dropdown.Menu>
-                    {filters.map((filter:string) => <Dropdown.Item onClick={()=> this.applyFilter(filter)}>{filter}</Dropdown.Item>)}
+                    {filters.map((filter:string) => <Dropdown.Item key={filter} onClick={()=> this.applyFilter(filter)}>{filter}</Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown>
         );

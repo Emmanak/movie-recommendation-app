@@ -46,23 +46,25 @@ class MovieCard extends React.PureComponent<MovieCardProps, MovieCardState> {
 
                         <Card.Body>
 
-                <Card.Title><span>{this.props.movieName} </span>
-                <a href={'https://www.imdb.com/find?q='+this.props.movieName.replace(" ", "+")+'&ref_=nv_sr_sm'}><img src={imdb}></img></a> 
+                <Card.Title><span>{this.props.movieName ? this.props.movieName: this.props.movieInfo.name} </span>
+                <a href={imdb_query(this.props.movieName)}><img src={imdb}></img></a> 
                             <p><span id={parseInt(this.props.id.replace('card-',''))+"popup"} 
                             className="badge badge-primary">Match Unavailable</span></p>
                             {moreInfo(this.props.movieInfo)}
                             </Card.Title>
-
-                            {/* <Card.Text>
-                                {movieOverview(this.props)}
-                                {moreInfo(this.props.movieInfo)}                              
-                            </Card.Text> */}
-
                         </Card.Body>
                     </Card>
                 </CSSTransition>
             </TransitionGroup>}
         </MovieContext.Consumer> );
+    }
+}
+
+const imdb_query = (movieName:string) => {
+    if(movieName){
+        return 'https://www.imdb.com/find?q='+movieName.replace(" ", "+")+'&ref_=nv_sr_sm';
+    }else{
+        return 'https://www.imdb.com';
     }
 }
 
@@ -122,8 +124,9 @@ const mediatagClassname = (media_type:string) =>{
 }
 
 const moreInfo = (props:any) =>{
-    var genre:Array<any> = props.genre_ids;
-    var genre2:Array<any> = props.genres;
+    let genre:Array<any> = props.genre_ids;
+    let genre2:Array<any> = props.genres;
+    let key = "m"+props.id+'g';
 
     if(genre2 === undefined){
             genre2 = [
@@ -136,6 +139,7 @@ const moreInfo = (props:any) =>{
             new_genre[i] = genre2[i].id;
         }
         genre = new_genre;
+        
     }
 
     return(
@@ -149,7 +153,7 @@ const moreInfo = (props:any) =>{
                 <Popover.Content>
                     <p><span className="badge badge-warning"><strong>{+props.vote_average+"/10"}</strong></span> ({props.vote_count} votes)</p>
                     <p>{props.overview}</p>
-                    <p><strong>Genre: </strong>{genre.map( (genreID:number) => <span className="badge badge-secondary ml-1">{Genre(genreID)}</span>)}</p>
+                    <p><strong>Genre: </strong>{genre.map( (genreID:number) => <span key={key+genreID} id={key+genreID} className="badge badge-secondary ml-1">{Genre(genreID)}</span>)}</p>
                     <p><span className="badge badge-primary">{props.release_date ? props.release_date : props.first_air_date}</span></p>
                 </Popover.Content>
       </Popover>}>
